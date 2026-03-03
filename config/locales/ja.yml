@@ -1,0 +1,19 @@
+ja:
+  activerecord:
+    errors:
+      messages:
+        blank: "を入力してください"
+        taken: "はすでに使用されています"
+        too_short: "は%{count}文字以上で入力してください"
+        confirmation: "が一致しません"
+      models:
+        user:
+          attributes:
+            name:
+              blank: "を入力してください"
+            email:
+              blank: "を入力してください"
+            password:
+              blank: "を入力してください"
+            password_confirmation:
+              confirmation: "が一致しません"
