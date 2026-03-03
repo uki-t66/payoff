@@ -18,6 +18,16 @@
   </head>
 
   <body class="bg-[#090D10]">
+    <% if notice %>
+      <div class="fixed top-4 right-4 z-50 px-5 py-3 rounded-lg bg-[#13daec]/10 border border-[#13daec]/30 text-[#13daec] text-sm font-medium shadow-lg">
+        <%= notice %>
+      </div>
+    <% end %>
+    <% if alert %>
+      <div class="fixed top-4 right-4 z-50 px-5 py-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-medium shadow-lg">
+        <%= alert %>
+      </div>
+    <% end %>
     <%= yield %>
   </body>
 </html>
