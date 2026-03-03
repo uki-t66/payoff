@@ -1,6 +1,8 @@
 class Category < ApplicationRecord
   belongs_to :user, optional: true
 
+  has_many :fixed_expenses
+
   validates :name, presence: true
 
   scope :preset, -> { where(is_preset: true) }
