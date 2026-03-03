@@ -6,14 +6,26 @@ ja:
         taken: "はすでに使用されています"
         too_short: "は%{count}文字以上で入力してください"
         confirmation: "が一致しません"
-      models:
-        user:
-          attributes:
-            name:
-              blank: "を入力してください"
-            email:
-              blank: "を入力してください"
-            password:
-              blank: "を入力してください"
-            password_confirmation:
-              confirmation: "が一致しません"
+        required: "を入力してください"
+        not_a_number: "は数値で入力してください"
+        greater_than: "は%{count}より大きい値にしてください"
+        inclusion: "は1〜31の範囲で入力してください"
+    attributes:
+      user:
+        name: "ユーザー名"
+        email: "メールアドレス"
+        password: "パスワード"
+        password_confirmation: "パスワード（確認用）"
+        monthly_income: "月収入"
+      fixed_expense:
+        user: "ユーザー"
+        category: "カテゴリ"
+        name: "固定費名"
+        fixed_cost_amount: "月額"
+        payment_day: "支払日"
+        is_active: "有効"
+      category:
+        user: "ユーザー"
+        name: "カテゴリ名"
+        color: "カラー"
+        is_preset: "プリセット"
