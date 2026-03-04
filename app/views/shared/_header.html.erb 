@@ -1,0 +1,79 @@
+<%# app/views/shared/_header.html.erb %>
+<header class="sticky top-0 z-50 flex items-center justify-between border-b border-gray-200 dark:border-white/10 bg-white/80 dark:bg-[#102022]/80 backdrop-blur-md px-6 py-4 lg:px-10">
+
+  <%# ロゴ %>
+  <%= link_to dashboard_path, class: "flex items-center gap-3" do %>
+    <div class="flex items-center justify-center w-8 h-8 rounded bg-[#13daec]/20 text-[#13daec]">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+    </div>
+    <span class="text-xl font-bold tracking-tight text-[#111718] dark:text-white">FixedFlow</span>
+  <% end %>
+
+  <%# 右側メニュー %>
+  <div class="flex items-center gap-3">
+
+    <%# テーマ切り替えボタン %>
+    <button id="theme-toggle" class="flex items-center justify-center w-9 h-9 rounded-lg bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-[#111718] dark:text-slate-300 transition-colors" aria-label="テーマ切り替え">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+      </svg>
+    </button>
+
+    <%# 固定費追加ボタン %>
+    <%= link_to new_fixed_expense_path,
+        class: "hidden sm:flex items-center gap-2 h-9 px-4 rounded-lg bg-[#13daec] hover:bg-[#13daec]/90 text-[#111718] text-sm font-bold transition-all shadow-sm shadow-[#13daec]/20" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+      固定費を追加
+    <% end %>
+
+    <%# マイページドロップダウン %>
+    <div class="relative" id="user-menu">
+      <button
+        id="user-menu-button"
+        class="flex items-center gap-2 h-9 px-3 rounded-lg bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-[#111718] dark:text-white text-sm font-medium transition-colors"
+        aria-expanded="false"
+        aria-haspopup="true">
+        <div class="w-6 h-6 rounded-full bg-[#13daec]/20 flex items-center justify-center">
+          <span class="text-xs font-bold text-[#13daec]"><%= current_user.name.slice(0, 1) %></span>
+        </div>
+        <span class="hidden sm:block max-w-24 truncate"><%= current_user.name %></span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-[#618689] dark:text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </button>
+
+      <%# ドロップダウンメニュー %>
+      <div
+        id="user-menu-dropdown"
+        class="hidden absolute right-0 mt-2 w-64 rounded-xl bg-white dark:bg-[#1a2e30] border border-gray-200 dark:border-white/10 shadow-xl z-50">
+
+        <%# ユーザー情報 %>
+        <div class="px-4 py-3 border-b border-gray-100 dark:border-white/10">
+          <p class="text-sm font-bold text-[#111718] dark:text-white truncate"><%= current_user.name %></p>
+          <p class="text-xs text-[#618689] dark:text-slate-400 truncate mt-0.5"><%= current_user.email %></p>
+        </div>
+
+        <%# メニュー項目 %>
+        <div class="py-2">
+          <%= link_to "アカウント設定", "#",
+              class: "flex items-center gap-3 px-4 py-2 text-sm text-[#111718] dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors" %>
+        </div>
+
+        <%# ログアウト %>
+        <div class="border-t border-gray-100 dark:border-white/10 py-2">
+          <%= button_to "ログアウト", logout_path, method: :delete,
+              class: "w-full flex items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors" %>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</header>
