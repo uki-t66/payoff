@@ -35,9 +35,9 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
           </svg>
         </button>
-        <%= link_to "ログイン", "#",
+        <%= link_to "ログイン", login_path,
             class: "flex h-10 px-5 items-center justify-center rounded-lg bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-[#111718] dark:text-white text-sm font-bold transition-colors" %>
-        <%= link_to "無料で始める", "#",
+        <%= link_to "無料で始める", new_user_path,
             class: "flex h-10 px-5 items-center justify-center rounded-lg bg-[#13daec] hover:bg-[#13daec]/90 text-[#111718] text-sm font-bold shadow-sm shadow-[#13daec]/20 transition-all" %>
       </div>
     </div>
@@ -72,7 +72,7 @@
             家賃・保険・サブスク・ローン。毎月確実に消えていく固定費を一元管理。「気づいたらお金がない」を、もう繰り返さない。
           </p>
           <div class="flex flex-wrap gap-4 pt-4">
-            <%= link_to "ダッシュボードを試す", "#",
+            <%= link_to "ダッシュボードを試す", new_user_path,
                 class: "flex h-12 px-6 items-center justify-center rounded-lg bg-[#111718] dark:bg-white hover:bg-black dark:hover:bg-slate-100 text-white dark:text-[#111718] text-base font-bold transition-all shadow-lg" %>
             <%= link_to "詳しく見る", "#",
                 class: "flex h-12 px-6 items-center justify-center rounded-lg bg-white dark:bg-white/10 border border-gray-200 dark:border-white/20 hover:border-[#13daec]/50 text-[#111718] dark:text-white text-base font-medium transition-all" %>
@@ -279,9 +279,9 @@
           <p class="text-gray-300 text-lg">登録無料。固定費を登録するだけで、今月使えるお金がすぐにわかる。</p>
         </div>
         <div class="relative z-10 flex gap-4 shrink-0 flex-col sm:flex-row w-full md:w-auto">
-          <%= link_to "無料アカウントを作成", "#",
+          <%= link_to "無料アカウントを作成", new_user_path,
               class: "flex h-12 px-6 items-center justify-center rounded-lg bg-[#13daec] hover:bg-white text-[#111718] text-base font-bold transition-all text-center" %>
-          <%= link_to "ログインはこちら", "#",
+          <%= link_to "ログインはこちら", login_path,
               class: "flex h-12 px-6 items-center justify-center rounded-lg border border-white/20 bg-white/5 hover:bg-white/10 text-white text-base font-medium transition-all text-center" %>
         </div>
       </section>
