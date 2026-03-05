@@ -20,6 +20,10 @@
   <body class="bg-[#090D10]">
 
     <% if logged_in? && controller_name != 'pages' %>
+      <%= render "shared/sidebar" %>
+    <% end %>
+
+    <% if logged_in? && controller_name != 'pages' %>
       <%= render "shared/header" %>
     <% end %>
     

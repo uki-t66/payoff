@@ -1,15 +1,25 @@
 <%# app/views/shared/_header.html.erb %>
 <header class="sticky top-0 z-50 flex items-center justify-between border-b border-gray-200 dark:border-white/10 bg-white/80 dark:bg-[#102022]/80 backdrop-blur-md px-6 py-4 lg:px-10">
+  <div class="flex items-center gap-3">
+    <%# ロゴ %>
+    <%= link_to dashboard_path, class: "flex items-center gap-3" do %>
+      <div class="flex items-center justify-center w-8 h-8 rounded bg-[#13daec]/20 text-[#13daec]">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <span class="text-xl font-bold tracking-tight text-[#111718] dark:text-white">FixedFlow</span>
+    <% end %>
 
-  <%# ロゴ %>
-  <%= link_to dashboard_path, class: "flex items-center gap-3" do %>
-    <div class="flex items-center justify-center w-8 h-8 rounded bg-[#13daec]/20 text-[#13daec]">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+    <%# サイドバー開閉ボタン %>
+    <button onclick="toggleSidebar()"
+        class="flex items-center justify-center w-9 h-9 rounded-lg bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-[#111718] dark:text-slate-300 transition-colors"
+        aria-label="メニュー">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
       </svg>
-    </div>
-    <span class="text-xl font-bold tracking-tight text-[#111718] dark:text-white">FixedFlow</span>
-  <% end %>
+    </button>
+  </div>
 
   <%# 右側メニュー %>
   <div class="flex items-center gap-3">
