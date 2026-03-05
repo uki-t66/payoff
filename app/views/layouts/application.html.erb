@@ -18,16 +18,28 @@
   </head>
 
   <body class="bg-[#090D10]">
-    <% if notice %>
-      <div class="fixed top-4 right-4 z-50 px-5 py-3 rounded-lg bg-[#13daec]/10 border border-[#13daec]/30 text-[#13daec] text-sm font-medium shadow-lg">
-        <%= notice %>
-      </div>
+
+    <% if logged_in? && controller_name != 'pages' %>
+      <%= render "shared/header" %>
     <% end %>
-    <% if alert %>
-      <div class="fixed top-4 right-4 z-50 px-5 py-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-medium shadow-lg">
-        <%= alert %>
-      </div>
+    
+    <% if notice || alert %>
+      <% if controller_name == 'pages' %>
+        <%# landingページはヘッダーの後に差し込むためyieldの前に置かない %>
+      <% else %>
+        <% if notice %>
+          <div class="w-full px-4 py-2 bg-emerald-100 dark:bg-emerald-500/15 border-b border-emerald-300 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-300 text-sm font-medium text-center">
+            <%= notice %>
+          </div>
+        <% end %>
+        <% if alert %>
+          <div class="w-full px-4 py-2 bg-red-100 dark:bg-red-500/15 border-b border-red-300 dark:border-red-500/30 text-red-800 dark:text-red-300 text-sm font-medium text-center">
+            <%= alert %>
+          </div>
+        <% end %>
+      <% end %>
     <% end %>
+
     <%= yield %>
   </body>
 </html>
