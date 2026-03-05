@@ -1,0 +1,85 @@
+<%# app/views/shared/_sidebar.html.erb %>
+<% sidebar_items = [
+  {
+    path: dashboard_path,
+    label: "ダッシュボード",
+    match: "dashboard",
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>'
+  },
+  {
+    path: fixed_expenses_path,
+    label: "固定費一覧",
+    match: "fixed_expenses",
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>'
+  },
+  {
+    path: "#",
+    label: "カレンダー",
+    match: "calendar",
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>'
+  }
+] %>
+
+<%# オーバーレイ（モバイル用） %>
+<div id="sidebar-overlay"
+     class="fixed inset-0 z-30 bg-black/40 backdrop-blur-sm hidden lg:hidden"
+     onclick="document.getElementById('sidebar').classList.add('-translate-x-full'); this.classList.add('hidden');">
+</div>
+
+<%# サイドバー本体 %>
+<aside id="sidebar"
+       class="fixed top-0 left-0 z-40 h-full w-64 -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col"
+       style="background: rgba(255,255,255,0.9); backdrop-filter: blur(12px); border-right: 1px solid rgba(0,0,0,0.06);"
+       data-dark-style="background: rgba(16,32,34,0.95); border-right: 1px solid rgba(255,255,255,0.08);">
+
+  <%# サイドバーヘッダー %>
+  <div class="flex items-center justify-between h-16 px-4 border-b border-gray-100 dark:border-white/10 shrink-0">
+    <%= link_to dashboard_path, class: "flex items-center gap-2" do %>
+      <div class="flex items-center justify-center w-7 h-7 rounded-lg bg-[#13daec]/20 text-[#13daec]">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <span class="font-bold text-[#111718] dark:text-white text-sm tracking-tight">FixedFlow</span>
+    <% end %>
+
+    <%# 閉じるボタン（モバイルのみ） %>
+    <button class="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-gray-500 dark:text-slate-400 transition-colors"
+            onclick="document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('sidebar-overlay').classList.add('hidden');">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <%# ナビゲーション %>
+  <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+    <% sidebar_items.each do |item| %>
+      <% is_active = controller_name == item[:match] %>
+      <%= link_to item[:path],
+          class: "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 #{is_active ? 'bg-[#13daec]/10 text-[#13daec] border border-[#13daec]/20' : 'text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-[#111718] dark:hover:text-white'}" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <%= item[:icon].html_safe %>
+        </svg>
+        <span><%= item[:label] %></span>
+        <% if is_active %>
+          <span class="ml-auto w-1.5 h-1.5 rounded-full bg-[#13daec]"></span>
+        <% end %>
+      <% end %>
+    <% end %>
+  </nav>
+
+  <%# ユーザー情報 %>
+  <div class="shrink-0 px-3 py-4 border-t border-gray-100 dark:border-white/10">
+    <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gray-50 dark:bg-white/5">
+      <div class="w-8 h-8 rounded-full bg-[#13daec]/20 flex items-center justify-center shrink-0">
+        <span class="text-sm font-bold text-[#13daec]"><%= current_user.name.slice(0, 1) %></span>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-medium text-[#111718] dark:text-white truncate"><%= current_user.name %></p>
+        <p class="text-xs text-gray-500 dark:text-slate-500 truncate"><%= current_user.email %></p>
+      </div>
+    </div>
+  </div>
+
+</aside>
