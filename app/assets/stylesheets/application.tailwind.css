@@ -1,2 +1,11 @@
 @import "tailwindcss";
 @variant dark (&:where(.dark, .dark *));
+
+/* サイドバー開閉 */
+#sidebar {
+  transform: translateX(0);
+}
+
+#sidebar.sidebar-closed {
+  transform: translateX(-100%);
+}
