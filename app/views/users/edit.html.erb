@@ -1,0 +1,72 @@
+<div class="p-6 lg:p-10 max-w-2xl mx-auto flex flex-col gap-6">
+
+  <div>
+    <h1 class="text-2xl font-black text-[#111718] dark:text-white">アカウント設定</h1>
+    <p class="text-sm text-[#618689] dark:text-slate-400 mt-1">アカウント情報の確認・変更ができます</p>
+  </div>
+
+  <%# ユーザー名変更カード %>
+  <div class="bg-white dark:bg-[#1a2e30] rounded-2xl border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 dark:border-white/10">
+      <h2 class="text-base font-bold text-[#111718] dark:text-white">ユーザー名</h2>
+      <p class="text-sm text-[#618689] dark:text-slate-400 mt-0.5">表示名を変更できます</p>
+    </div>
+    <div class="p-6">
+      <% if @user.errors.any? %>
+        <div class="mb-4 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 p-4">
+          <ul class="text-sm text-red-600 dark:text-red-400 space-y-1">
+            <% @user.errors.full_messages.each do |message| %>
+              <li>・ <%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= form_with model: @user, url: user_path(@user), method: :patch, local: true do |f| %>
+        <div class="flex gap-3 items-end">
+          <div class="flex-1">
+            <%= f.label :name, "ユーザー名",
+                class: "block text-sm font-medium text-[#111718] dark:text-slate-300 mb-1" %>
+            <%= f.text_field :name,
+                class: "w-full h-11 px-4 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-[#111718] dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors" %>
+          </div>
+          <%= f.submit "変更する",
+              class: "h-11 px-5 rounded-lg bg-[#13daec] hover:bg-[#13daec]/90 text-[#111718] font-bold text-sm transition-all cursor-pointer shrink-0" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%# ログイン情報カード %>
+  <div class="bg-white dark:bg-[#1a2e30] rounded-2xl border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 dark:border-white/10">
+      <h2 class="text-base font-bold text-[#111718] dark:text-white">ログイン情報</h2>
+      <p class="text-sm text-[#618689] dark:text-slate-400 mt-0.5">現在のログイン情報</p>
+    </div>
+    <div class="p-6 flex flex-col gap-3">
+      <div class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-white/10">
+        <span class="text-sm text-[#618689] dark:text-slate-400">メールアドレス</span>
+        <span class="text-sm font-medium text-[#111718] dark:text-white"><%= current_user.email %></span>
+      </div>
+      <div class="flex items-center justify-between py-2">
+        <span class="text-sm text-[#618689] dark:text-slate-400">パスワード</span>
+        <span class="text-sm font-medium text-[#111718] dark:text-white">••••••••</span>
+      </div>
+    </div>
+  </div>
+
+  <%# アカウント削除カード %>
+  <div class="bg-white dark:bg-[#1a2e30] rounded-2xl border border-red-200 dark:border-red-500/20 shadow-sm overflow-hidden">
+    <div class="px-6 py-4 border-b border-red-100 dark:border-red-500/20">
+      <h2 class="text-base font-bold text-red-600 dark:text-red-400">アカウント削除</h2>
+      <p class="text-sm text-[#618689] dark:text-slate-400 mt-0.5">一度削除すると元に戻せません</p>
+    </div>
+    <div class="p-6">
+      <button disabled
+              class="h-10 px-5 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-400 dark:text-red-400/50 font-bold text-sm border border-red-200 dark:border-red-500/20 cursor-not-allowed opacity-50">
+        アカウントを削除する（準備中）
+      </button>
+    </div>
+  </div>
+
+</div>

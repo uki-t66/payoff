@@ -2,11 +2,12 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   # Landingページ
   root "pages#top"
-  resources :users, only: [ :new, :create ]
+  resources :users, only: [ :new, :create, :edit, :update ]
   get    "login",  to: "sessions#new"
   post   "login",  to: "sessions#create"
   delete "logout", to: "sessions#destroy"
-  get "dashboard", to: "dashboard#index"
+  get    "dashboard", to: "dashboard#index"
+  resources :fixed_expenses, only: [ :index, :new, :create, :edit, :update, :destroy ]
 
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
