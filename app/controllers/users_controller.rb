@@ -21,8 +21,8 @@ class UsersController < ApplicationController
   end
 
   def update
-    if @user.update(name_params)
-      redirect_to edit_user_path(current_user), notice: "ユーザー名を変更しました"
+    if @user.update(profile_params)
+      redirect_to edit_user_path(current_user), notice: "#{update_target}を変更しました"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -38,7 +38,11 @@ class UsersController < ApplicationController
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 
-  def name_params
-    params.require(:user).permit(:name)
+  def profile_params
+    params.require(:user).permit(:name, :email)
+  end
+
+  def update_target
+    params[:user][:email].present? ? "メールアドレス" : "ユーザー名"
   end
 end
