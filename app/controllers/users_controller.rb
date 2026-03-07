@@ -21,14 +21,57 @@ class UsersController < ApplicationController
   end
 
   def update
-    if @user.update(profile_params)
-      redirect_to edit_user_path(current_user), notice: "#{update_target}を変更しました"
+    if params[:user].key?(:current_password)
+      update_password
+    elsif params[:user].key?(:email)
+      update_email
+    else
+      update_name
+    end
+  end
+
+  private
+
+  def update_name
+    if @user.update(name_params)
+      redirect_to edit_user_path(current_user), notice: "ユーザー名を変更しました"
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
-  private
+  def update_email
+    if @user.update(email_params)
+      redirect_to edit_user_path(current_user), notice: "メールアドレスを変更しました"
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def update_password
+    unless @user.authenticate(params[:user][:current_password])
+      @user.errors.add(:current_password, "が正しくありません")
+      render :edit, status: :unprocessable_entity and return
+    end
+
+    if @user.update(password_params)
+      redirect_to edit_user_path(current_user), notice: "パスワードを変更しました"
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def name_params
+    params.require(:user).permit(:name)
+  end
+
+  def email_params
+    params.require(:user).permit(:email)
+  end
+
+  def password_params
+    params.require(:user).permit(:password, :password_confirmation)
+  end
 
   def set_user
     @user = current_user
@@ -38,11 +81,4 @@ class UsersController < ApplicationController
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 
-  def profile_params
-    params.require(:user).permit(:name, :email)
-  end
-
-  def update_target
-    params[:user][:email].present? ? "メールアドレス" : "ユーザー名"
-  end
 end
