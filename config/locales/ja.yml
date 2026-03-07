@@ -10,6 +10,10 @@ ja:
         not_a_number: "は数値で入力してください"
         greater_than: "は%{count}より大きい値にしてください"
         inclusion: "は1〜31の範囲で入力してください"
+    models:
+      fixed_expense: "固定費"
+      user: "ユーザー"
+      category: "カテゴリ"
     attributes:
       user:
         name: "ユーザー名"
@@ -20,6 +24,7 @@ ja:
       fixed_expense:
         user: "ユーザー"
         category: "カテゴリ"
+        category_id: "カテゴリ"
         name: "固定費名"
         fixed_cost_amount: "月額"
         payment_day: "支払日"

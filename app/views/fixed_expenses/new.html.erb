@@ -1,0 +1,129 @@
+<div class="p-6 lg:p-10 max-w-2xl mx-auto flex flex-col gap-6">
+
+  <div>
+    <h1 class="text-2xl font-black text-[#111718] dark:text-white">固定費を登録</h1>
+    <p class="text-sm text-[#618689] dark:text-slate-400 mt-1">毎月発生する固定費を登録してください</p>
+  </div>
+
+  <div class="bg-white dark:bg-[#1a2e30] rounded-2xl border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden">
+    <div class="p-6">
+
+      <%# エラー表示 %>
+      <% if @fixed_expense.errors.any? %>
+        <div class="mb-6 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 p-4">
+          <ul class="text-sm text-red-600 dark:text-red-400 space-y-1">
+            <% @fixed_expense.errors.full_messages.each do |message| %>
+              <li>・ <%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= form_with model: @fixed_expense, url: fixed_expenses_path, local: true do |f| %>
+        <div class="flex flex-col gap-5">
+
+          <%# カテゴリ %>
+            <div>
+            <%= f.label :category_id, "カテゴリ",
+                class: "block text-sm font-medium text-[#111718] dark:text-slate-300 mb-1" %>
+            <div class="relative" data-custom-select data-select-day>
+                <%= f.select :category_id,
+                    @categories.map { |c| [c.name, c.id] },
+                    { prompt: "カテゴリを選択" },
+                    class: "hidden",
+                    data: { select_input: true } %>
+                <button type="button"
+                        class="w-full h-11 px-4 rounded-lg bg-gray-50 dark:bg-[#1a2e30] border border-gray-200 dark:border-white/10 text-gray-400 dark:text-slate-400 text-left text-sm focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors flex items-center justify-between"
+                        data-select-trigger>
+                <span data-select-label>カテゴリを選択</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+                </button>
+                <div class="hidden absolute z-50 w-full mt-1 rounded-lg bg-white dark:bg-[#1a2e30] border border-gray-200 dark:border-white/10 shadow-lg overflow-hidden"
+                    data-select-dropdown>
+                <div class="py-1">
+                    <div class="px-4 py-2.5 text-sm text-gray-400 dark:text-slate-500 hover:bg-gray-50 dark:hover:bg-white/5 cursor-pointer"
+                        data-select-option=""
+                        data-select-text="カテゴリを選択">カテゴリを選択</div>
+                    <% @categories.each do |c| %>
+                    <div class="px-4 py-2.5 text-sm text-gray-900 dark:text-white hover:bg-[#13daec]/10 hover:text-[#13daec] cursor-pointer transition-colors"
+                        data-select-option="<%= c.id %>"
+                        data-select-text="<%= c.name %>"><%= c.name %></div>
+                    <% end %>
+                </div>
+                </div>
+            </div>
+            </div>
+
+
+          <%# 名称 %>
+          <div>
+            <%= f.label :name, "名称（固定費名）",
+                class: "block text-sm font-medium text-[#111718] dark:text-slate-300 mb-1" %>
+            <%= f.text_field :name,
+                placeholder: "例：Netflix、電気代、家賃",
+                class: "w-full h-11 px-4 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-[#111718] dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors" %>
+          </div>
+
+          <%# 月額 %>
+          <div>
+            <%= f.label :fixed_cost_amount, "月額（円）",
+                class: "block text-sm font-medium text-[#111718] dark:text-slate-300 mb-1" %>
+            <div class="relative">
+              <%= f.number_field :fixed_cost_amount,
+                  placeholder: "例：1500",
+                  min: 1,
+                  class: "w-full h-11 px-4 pr-8 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-[#111718] dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors" %>
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-[#618689] dark:text-slate-400">円</span>
+            </div>
+          </div>
+
+          <%# 支払日 %>
+            <div>
+            <%= f.label :payment_day, "支払日",
+                class: "block text-sm font-medium text-[#111718] dark:text-slate-300 mb-1" %>
+            <div class="relative" data-custom-select data-select-day>
+                <%= f.select :payment_day,
+                    (1..31).map { |d| ["毎月#{d}日", d] },
+                    { prompt: "支払日を選択" },
+                    class: "hidden",
+                    data: { select_input: true } %>
+                <button type="button"
+                        class="w-full h-11 px-4 rounded-lg bg-gray-50 dark:bg-[#1a2e30] border border-gray-200 dark:border-white/10 text-gray-400 dark:text-slate-400 text-left text-sm focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors flex items-center justify-between"
+                        data-select-trigger>
+                <span data-select-label>支払日を選択</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+                </button>
+                <div class="hidden absolute z-50 w-full mt-1 rounded-lg bg-white dark:bg-[#1a2e30] border border-gray-200 dark:border-white/10 shadow-lg overflow-hidden max-h-72 overflow-y-auto"
+                    data-select-dropdown>
+                <div class="py-1">
+                    <div class="px-4 py-2.5 text-sm text-gray-400 dark:text-slate-500 hover:bg-gray-50 dark:hover:bg-white/5 cursor-pointer"
+                        data-select-option=""
+                        data-select-text="支払日を選択">支払日を選択</div>
+                    <% (1..31).each do |d| %>
+                    <div class="px-4 py-2.5 text-sm text-gray-900 dark:text-white hover:bg-[#13daec]/10 hover:text-[#13daec] cursor-pointer transition-colors"
+                        data-select-option="<%= d %>"
+                        data-select-text="毎月<%= d %>日">毎月<%= d %>日</div>
+                    <% end %>
+                </div>
+                </div>
+            </div>
+            </div>
+
+          <%# ボタン %>
+          <div class="flex gap-3 pt-2">
+            <%= link_to "キャンセル", fixed_expenses_path,
+                class: "flex-1 h-11 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-white/10 text-[#111718] dark:text-white font-bold text-sm hover:bg-gray-200 dark:hover:bg-white/20 transition-colors" %>
+            <%= f.submit "登録する",
+                class: "flex-1 h-11 rounded-lg bg-[#13daec] hover:bg-[#13daec]/90 text-[#111718] font-bold text-sm transition-all cursor-pointer" %>
+          </div>
+
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+</div>
