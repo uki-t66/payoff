@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
   before_action :redirect_if_logged_in, only: [ :new ]
-  before_action :require_login, only: [ :edit, :update ]
-  before_action :set_user, only: [ :edit, :update ]
+  before_action :require_login, only: [ :edit, :update, :destroy ]
+  before_action :set_user, only: [ :edit, :update, :destroy ]
+
 
   def new
     @user = User.new
@@ -28,6 +29,12 @@ class UsersController < ApplicationController
     else
       update_name
     end
+  end
+
+  def destroy
+    @user.destroy
+    session.delete(:user_id)
+    redirect_to root_path, notice: "アカウントを削除しました"
   end
 
   private
