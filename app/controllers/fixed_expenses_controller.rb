@@ -1,6 +1,13 @@
 class FixedExpensesController < ApplicationController
   before_action :require_login
 
+  def index
+    @fixed_expenses = current_user.fixed_expenses
+                                  .includes(:category)
+                                  .order(:payment_day)
+    @total_amount = @fixed_expenses.sum(:fixed_cost_amount)
+  end
+
   def new
     @fixed_expense = FixedExpense.new
     @categories = Category.where(is_preset: true)
