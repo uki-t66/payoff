@@ -1,16 +1,21 @@
-function setupIncomeInput() {
-  const input = document.getElementById('income-input');
-  if (!input) return;
+// app/javascript/income_input.js
+
+function setupIncomeInput(inputId, valueId) {
+  const input = document.getElementById(inputId);
+  const hidden = document.getElementById(valueId);
+  if (!input || !hidden) return;
 
   input.addEventListener('input', () => {
-    // 数字以外を除去
     const raw = input.value.replace(/[^0-9]/g, '');
-    // カンマ区切りで表示
     input.value = raw ? Number(raw).toLocaleString('ja-JP') : '';
-    // hidden inputに数値のみをセット
-    document.getElementById('income-value').value = raw;
+    hidden.value = raw;
   });
 }
 
-document.addEventListener('DOMContentLoaded', setupIncomeInput);
-document.addEventListener('turbo:load', setupIncomeInput);
+function setupAllIncomeInputs() {
+  setupIncomeInput('income-input', 'income-value');
+  setupIncomeInput('income-input-settings', 'income-value-settings');
+}
+
+document.addEventListener('DOMContentLoaded', setupAllIncomeInputs);
+document.addEventListener('turbo:load', setupAllIncomeInputs);
