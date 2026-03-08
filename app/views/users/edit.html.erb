@@ -37,6 +37,53 @@
     </div>
   </div>
 
+  <%# 月収カード %>
+  <div class="bg-white dark:bg-[#1a2e30] rounded-2xl border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 dark:border-white/10">
+      <h2 class="text-base font-bold text-[#111718] dark:text-white">月収</h2>
+      <p class="text-sm text-[#618689] dark:text-slate-400 mt-0.5">手取りの月収入を設定できます</p>
+    </div>
+    <div class="p-6">
+      <% if @user.errors[:monthly_income].any? %>
+        <div class="mb-4 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 p-4">
+          <ul class="text-sm text-red-600 dark:text-red-400 space-y-1">
+            <% @user.errors[:monthly_income].each do |message| %>
+              <li>・ 月収<%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= form_with url: update_income_user_path(@user), method: :patch, local: true do |f| %>
+        <div class="flex gap-3 items-end">
+          <div class="flex-1">
+            <%= f.label :monthly_income, "月収（円）",
+                class: "block text-sm font-medium text-[#111718] dark:text-slate-300 mb-1" %>
+            <div class="relative">
+              <%# 表示用（カンマあり） %>
+              <input type="text"
+                    id="income-input-settings"
+                    value="<%= number_with_delimiter(@user.monthly_income) if @user.monthly_income %>"
+                    placeholder="例：300,000"
+                    autocomplete="off"
+                    class="w-full h-11 px-4 pr-8 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-[#111718] dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors" />
+              <%# 送信用（数値のみ） %>
+              <input type="hidden"
+                    id="income-value-settings"
+                    name="user[monthly_income]"
+                    value="<%= @user.monthly_income %>" />
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-[#618689] dark:text-slate-400">円</span>
+            </div>
+          </div>
+          <button type="submit"
+                  class="h-11 px-5 rounded-lg bg-[#13daec] hover:bg-[#13daec]/90 text-[#111718] font-bold text-sm transition-all shrink-0">
+            <%= @user.monthly_income.nil? ? "設定する" : "変更する" %>
+          </button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
   <%# メールアドレス変更カード %>
   <div class="bg-white dark:bg-[#1a2e30] rounded-2xl border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden">
   <div class="px-6 py-4 border-b border-gray-100 dark:border-white/10">
