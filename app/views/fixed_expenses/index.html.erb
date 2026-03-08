@@ -98,6 +98,13 @@
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                     </svg>
                   <% end %>
+                  <button type="button"
+                          onclick="openDeleteModal('<%= fe.uuid %>', '<%= fe.name %>', '<%= number_with_delimiter(fe.fixed_cost_amount) %>')"
+                          class="flex items-center justify-center w-8 h-8 rounded-lg bg-red-50 dark:bg-red-500/10 hover:bg-red-100 dark:hover:bg-red-500/20 text-red-500 dark:text-red-400 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                  </button>
                 </div>
               </td>
 
@@ -120,5 +127,41 @@
     </div>
 
   <% end %>
+  <%# 削除確認モーダル %>
+  <div id="delete-modal"
+      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+      onclick="if(event.target === this) closeDeleteModal()">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+    <div class="relative z-10 w-full max-w-md bg-white dark:bg-[#1a2e30] rounded-2xl border border-gray-200 dark:border-white/10 shadow-2xl p-6 flex flex-col gap-5">
 
+      <div class="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 dark:bg-red-500/10 mx-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        </svg>
+      </div>
+
+      <div class="text-center">
+        <h3 class="text-lg font-bold text-[#111718] dark:text-white mb-2">固定費を削除しますか？</h3>
+        <p class="text-sm text-[#618689] dark:text-slate-400 mb-1" id="modal-expense-name"></p>
+        <p class="text-lg font-bold text-[#111718] dark:text-white" id="modal-expense-amount"></p>
+      </div>
+
+      <div class="flex gap-3">
+        <button type="button"
+                onclick="closeDeleteModal()"
+                class="flex-1 h-12 rounded-lg bg-gray-100 dark:bg-white/10 text-[#111718] dark:text-white font-bold text-sm hover:bg-gray-200 dark:hover:bg-white/20 transition-colors">
+          キャンセル
+        </button>
+        <form id="delete-form" method="post" action="">
+          <input type="hidden" name="_method" value="delete">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <button type="submit"
+                  class="w-full h-12 px-8 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold text-base transition-colors cursor-pointer">
+            削除する
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
 </div>
