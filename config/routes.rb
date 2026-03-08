@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   post   "login",  to: "sessions#create"
   delete "logout", to: "sessions#destroy"
   get    "dashboard", to: "dashboard#index"
-  resources :fixed_expenses, only: [ :index, :new, :create, :edit, :update, :destroy ]
+  resources :fixed_expenses, only: [ :index, :new, :create, :edit, :update, :destroy ], param: :uuid
 
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
