@@ -1,6 +1,6 @@
 class FixedExpensesController < ApplicationController
   before_action :require_login
-  before_action :set_fixed_expense, only: [ :edit, :update ]
+  before_action :set_fixed_expense, only: [ :edit, :update, :destroy ]
 
   def index
     @fixed_expenses = current_user.fixed_expenses
@@ -35,6 +35,11 @@ class FixedExpensesController < ApplicationController
       @categories = Category.where(is_preset: true)
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @fixed_expense.destroy
+    redirect_to fixed_expenses_path, notice: "#{@fixed_expense.name}を削除しました"
   end
 
   private
