@@ -37,6 +37,11 @@ class FixedExpensesController < ApplicationController
     end
   end
 
+  def destroy
+    @fixed_expense.destroy
+    redirect_to fixed_expenses_path, notice: "#{@fixed_expense.name}を削除しました"
+  end
+
   private
 
   def set_fixed_expense
