@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
   before_action :redirect_if_logged_in, only: [ :new ]
-  before_action :require_login, only: [ :edit, :update, :destroy ]
-  before_action :set_user, only: [ :edit, :update, :destroy ]
+  before_action :require_login, only: [ :edit, :update, :destroy, :update_income ]
+  before_action :set_user, only: [ :edit, :update, :destroy, :update_income ]
+
 
 
   def new
@@ -35,6 +36,14 @@ class UsersController < ApplicationController
     @user.destroy
     session.delete(:user_id)
     redirect_to root_path, notice: "アカウントを削除しました"
+  end
+
+  def update_income
+    if @user.update(income_params)
+      redirect_to dashboard_path, notice: "月収を設定しました"
+    else
+      redirect_back fallback_location: dashboard_path, alert: @user.errors.full_messages.first
+    end
   end
 
   private
@@ -86,5 +95,9 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
+  end
+
+  def income_params
+    params.require(:user).permit(:monthly_income)
   end
 end

@@ -9,3 +9,7 @@
 #sidebar.sidebar-closed {
   transform: translateX(-100%);
 }
+
+button, input[type="submit"] {
+  cursor: pointer;
+}
