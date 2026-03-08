@@ -2,7 +2,11 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   # Landingページ
   root "pages#top"
-  resources :users, only: [ :new, :create, :edit, :update, :destroy ]
+  resources :users, only: [ :new, :create, :edit, :update, :destroy ] do
+    member do
+      patch :update_income
+    end
+  end
   get    "login",  to: "sessions#new"
   post   "login",  to: "sessions#create"
   delete "logout", to: "sessions#destroy"
