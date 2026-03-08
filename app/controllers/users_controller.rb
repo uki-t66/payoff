@@ -42,7 +42,7 @@ class UsersController < ApplicationController
     if @user.update(income_params)
       redirect_to dashboard_path, notice: "月収を設定しました"
     else
-      redirect_to dashboard_path, alert: "月収を正しく入力してください"
+      redirect_back fallback_location: dashboard_path, alert: @user.errors.full_messages.first
     end
   end
 
