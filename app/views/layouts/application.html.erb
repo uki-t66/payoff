@@ -17,7 +17,7 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
-  <body class="bg-[#F5F9FC] dark:bg-[#0a1415] min-h-screen">
+  <body class="bg-[#F5F9FC] dark:bg-[#0d1117] min-h-screen">
 
     <% if logged_in? && controller_name != 'pages' %>
       <%= render "shared/sidebar" %>
@@ -45,7 +45,7 @@
     <% end %>
 
     <div id="main-content"
-        class="<%= logged_in? && controller_name != 'pages' ? 'lg:pl-64' : '' %> transition-all duration-300 min-h-screen bg-[#F5F9FC] dark:bg-[#0a1415]">
+        class="<%= logged_in? && controller_name != 'pages' ? 'lg:pl-64' : '' %> transition-all duration-300 min-h-screen bg-[#F5F9FC] dark:bg-[#0d1117]">
       <%= yield %>
     </div>
 

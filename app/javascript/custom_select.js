@@ -43,8 +43,8 @@ document.addEventListener('click', (e) => {
 
     if (value) {
       const btn = container.querySelector('[data-select-trigger]');
-      btn.classList.remove('text-gray-400', 'dark:text-slate-400');
-      btn.classList.add('text-gray-900', 'dark:text-white');
+      btn.classList.remove('text-gray-400', 'dark:text-[#7d8590]');
+      btn.classList.add('text-gray-900', 'dark:text-[#e6edf3]');
     }
 
     dropdown.classList.add('hidden');
