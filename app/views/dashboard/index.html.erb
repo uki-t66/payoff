@@ -1,32 +1,160 @@
+<%# app/views/dashboard/index.html.erb %>
 <div class="p-6 lg:p-10 flex flex-col gap-6">
 
+  <%# ページタイトル %>
   <div>
-    <h1 class="text-2xl font-black text-[#111718] dark:text-white">ダッシュボード</h1>
-    <p class="text-sm text-[#618689] dark:text-slate-400 mt-1">固定費の概要を確認できます</p>
+    <h1 class="text-2xl font-black text-[#111718] dark:text-[#e6edf3]">ダッシュボード</h1>
+    <p class="text-sm text-[#618689] dark:text-[#7d8590] mt-1">固定費の概要を確認できます</p>
   </div>
 
   <%# 月収未設定バナー %>
-  <% if current_user.monthly_income.nil? %>
-    <div class="relative overflow-hidden rounded-2xl border border-[#13daec]/30 bg-[#13daec]/5 dark:bg-[#13daec]/10 p-5 flex items-center justify-between gap-4">
-      <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#13daec 1px, transparent 1px); background-size: 16px 16px;"></div>
+  <% unless @calc.income_set? %>
+    <div class="relative overflow-hidden rounded-2xl border border-[#13daec]/30 dark:border-[#b5f714]/20 bg-[#13daec]/5 dark:bg-[#b5f714]/5 p-5 flex items-center justify-between gap-4">
       <div class="relative z-10 flex items-center gap-4">
-        <div class="w-10 h-10 rounded-full bg-[#13daec]/20 flex items-center justify-center shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#13daec]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="w-10 h-10 rounded-full bg-[#13daec]/20 dark:bg-[#b5f714]/10 flex items-center justify-center shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#13daec] dark:text-[#b5f714]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
         </div>
         <div>
-          <p class="text-sm font-bold text-[#111718] dark:text-white">月収が未設定です</p>
-          <p class="text-xs text-[#618689] dark:text-slate-400 mt-0.5">月収を登録すると固定費の収入利用率を確認できます</p>
+          <p class="text-sm font-bold text-[#111718] dark:text-[#e6edf3]">月収が未設定です</p>
+          <p class="text-xs text-[#618689] dark:text-[#7d8590] mt-0.5">月収を登録すると固定費の収入利用率を確認できます</p>
         </div>
       </div>
       <button type="button"
               onclick="document.getElementById('income-modal').classList.remove('hidden')"
-              class="relative z-10 shrink-0 h-9 px-4 rounded-lg bg-[#13daec] hover:bg-[#13daec]/90 text-[#111718] text-sm font-bold transition-all">
+              class="relative z-10 shrink-0 h-9 px-4 rounded-lg bg-[#13daec] dark:bg-[#b5f714] hover:opacity-90 text-[#111718] text-sm font-bold transition-all">
         月収を設定する
       </button>
     </div>
   <% end %>
+
+  <%# ヒーローカード 2枚 %>
+  <div class="grid gap-4 lg:grid-cols-2">
+
+    <%# 左：今月使えるお金 %>
+    <div class="relative overflow-hidden rounded-2xl bg-white dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] p-7 shadow-sm">
+      <div class="absolute inset-0 pointer-events-none"
+          style="background: radial-gradient(ellipse at 100% 0%, rgba(19,218,236,0.07) 0%, transparent 60%);"></div>
+      <div class="relative z-10 flex flex-col gap-3">
+        <p class="text-xs font-bold tracking-widest uppercase text-[#13daec]">今月使えるお金</p>
+        <% if @calc.income_set? %>
+          <p class="text-4xl font-black <%= @calc.available_amount >= 0 ? 'text-[#111718] dark:text-[#e6edf3]' : 'text-red-500' %>">
+            ¥<%= number_with_delimiter(@calc.available_amount) %>
+          </p>
+          <p class="text-sm text-[#618689] dark:text-[#7d8590]">
+            月収 ¥<%= number_with_delimiter(current_user.monthly_income) %> − 固定費 ¥<%= number_with_delimiter(@calc.total_fixed_cost) %>
+          </p>
+        <% else %>
+          <p class="text-4xl font-black text-gray-300 dark:text-[#30363d]">---</p>
+          <p class="text-sm text-[#618689] dark:text-[#7d8590]">月収を設定すると表示されます</p>
+        <% end %>
+      </div>
+    </div>
+
+    <%# 右：固定費合計 ＋ 収入利用率 %>
+    <div class="relative overflow-hidden rounded-2xl bg-white dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] p-7 shadow-sm flex flex-col gap-5">
+      <div class="absolute inset-0 pointer-events-none"
+          style="background: radial-gradient(ellipse at 0% 100%, rgba(19,218,236,0.05) 0%, transparent 60%);"></div>
+      <div class="relative z-10 flex flex-col gap-5">
+
+        <%# 固定費合計 %>
+        <div class="flex flex-col gap-1">
+          <p class="text-xs font-bold tracking-widest uppercase text-[#618689] dark:text-[#7d8590]">固定費合計</p>
+          <p class="text-4xl font-black text-[#111718] dark:text-[#e6edf3]">
+            ¥<%= number_with_delimiter(@calc.total_fixed_cost) %>
+          </p>
+          <p class="text-sm text-[#618689] dark:text-[#7d8590]"><%= current_user.fixed_expenses.where(is_active: true).count %>件の固定費</p>
+        </div>
+
+        <%# 収入利用率 %>
+        <% if @calc.income_set? %>
+          <div class="flex flex-col gap-2">
+            <div class="flex items-center justify-between">
+              <p class="text-xs font-bold tracking-widest uppercase text-[#618689] dark:text-[#7d8590]">収入利用率</p>
+              <p class="text-sm font-black <%= @calc.usage_rate > 50 ? 'text-yellow-500' : 'text-[#13daec]' %>"><%= @calc.usage_rate %>%</p>
+            </div>
+            <div class="w-full bg-gray-100 dark:bg-[#30363d] rounded-full h-2">
+              <div class="h-2 rounded-full transition-all <%= @calc.usage_rate > 50 ? 'bg-yellow-400' : 'bg-[#13daec]' %>"
+                  style="width: <%= [@calc.usage_rate, 100].min %>%"></div>
+            </div>
+          </div>
+        <% else %>
+          <div class="flex flex-col gap-2">
+            <p class="text-xs font-bold tracking-widest uppercase text-[#618689] dark:text-[#7d8590]">収入利用率</p>
+            <div class="w-full bg-gray-100 dark:bg-[#30363d] rounded-full h-2"></div>
+            <p class="text-xs text-[#618689] dark:text-[#7d8590]">月収を設定すると表示されます</p>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+
+  </div>
+
+  <%# 2カラムカード %>
+  <div class="grid gap-4 lg:grid-cols-3">
+
+    <%# 固定費合計・利用率カード %>
+    <div class="bg-white dark:bg-[#1c2128] rounded-2xl border border-gray-200 dark:border-[#30363d] p-6 shadow-sm flex flex-col gap-3">
+      <div>
+        <p class="text-xs font-bold tracking-widest uppercase text-[#618689] dark:text-[#7d8590]">固定費合計</p>
+      </div>
+      <p class="text-3xl font-black text-[#111718] dark:text-[#e6edf3]">
+        ¥<%= number_with_delimiter(@calc.total_fixed_cost) %>
+      </p>
+      <p class="text-xs text-[#618689] dark:text-[#7d8590]">
+        <%= current_user.fixed_expenses.where(is_active: true).count %>件の固定費
+      </p>
+      <% if @calc.income_set? %>
+        <div class="mt-2">
+          <div class="w-full bg-gray-100 dark:bg-[#161b22] rounded-full h-1.5">
+            <div class="h-1.5 rounded-full <%= @calc.usage_rate > 50 ? 'bg-yellow-400' : 'bg-[#b5f714]' %>"
+                style="width: <%= [@calc.usage_rate, 100].min %>%"></div>
+          </div>
+          <p class="text-xs text-[#618689] dark:text-[#7d8590] mt-1">収入利用率 <%= @calc.usage_rate %>%</p>
+        </div>
+      <% end %>
+    </div>
+
+    <%# 直近の支払い %>
+    <div class="lg:col-span-2 bg-white dark:bg-[#1c2128] rounded-2xl border border-gray-200 dark:border-[#30363d] shadow-sm overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-100 dark:border-[#30363d] flex items-center justify-between">
+        <div>
+          <p class="text-sm font-bold text-[#111718] dark:text-[#e6edf3]">直近の支払い</p>
+          <p class="text-xs text-[#618689] dark:text-[#7d8590] mt-0.5">支払日順</p>
+        </div>
+        <%= link_to "すべて見る", fixed_expenses_path,
+            class: "text-xs font-bold text-[#13daec] dark:text-[#b5f714] hover:underline uppercase tracking-wide" %>
+      </div>
+      <% if @fixed_expenses.any? %>
+        <div class="divide-y divide-gray-100 dark:border-[#30363d]">
+          <% @fixed_expenses.first(5).each do |fe| %>
+            <div class="flex items-center justify-between px-6 py-3.5 hover:bg-gray-50 dark:hover:bg-[#141a11] transition-colors">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                    style="background-color: <%= fe.category.color %>25;">
+                  <div class="w-2.5 h-2.5 rounded-full" style="background-color: <%= fe.category.color %>;"></div>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-[#111718] dark:text-[#e6edf3]"><%= fe.name %></p>
+                  <p class="text-xs text-[#618689] dark:text-[#7d8590]">毎月<%= fe.payment_day %>日</p>
+                </div>
+              </div>
+              <p class="text-sm font-bold text-[#111718] dark:text-[#e6edf3]">−¥<%= number_with_delimiter(fe.fixed_cost_amount) %></p>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="flex flex-col items-center justify-center py-12 gap-2">
+          <p class="text-sm text-[#618689] dark:text-[#7d8590]">固定費が登録されていません</p>
+          <%= link_to "固定費を登録する", new_fixed_expense_path,
+              class: "text-xs font-bold text-[#13daec] dark:text-[#b5f714] hover:underline" %>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
 
 </div>
 
@@ -34,46 +162,38 @@
 <div id="income-modal"
      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
      onclick="if(event.target === this) this.classList.add('hidden')">
-  <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-  <div class="relative z-10 w-full max-w-md bg-white dark:bg-[#1a2e30] rounded-2xl border border-gray-200 dark:border-white/10 shadow-2xl p-6 flex flex-col gap-5">
-
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+  <div class="relative z-10 w-full max-w-md bg-white dark:bg-[#161b22] rounded-2xl border border-gray-200 dark:border-[#21262d] shadow-2xl p-6 flex flex-col gap-5">
     <div>
-      <h3 class="text-lg font-bold text-[#111718] dark:text-white">月収を設定する</h3>
-      <p class="text-sm text-[#618689] dark:text-slate-400 mt-1">手取りの月収入を入力してください</p>
+      <h3 class="text-lg font-bold text-[#111718] dark:text-[#e6edf3]">月収を設定する</h3>
+      <p class="text-sm text-[#618689] dark:text-[#7d8590] mt-1">手取りの月収入を入力してください</p>
     </div>
-
     <%= form_with url: update_income_user_path(current_user), method: :patch, local: true do |f| %>
       <div class="flex flex-col gap-4">
         <div>
-            <%= f.label :monthly_income, "月収（円）",
-                class: "block text-sm font-medium text-[#111718] dark:text-slate-300 mb-1" %>
-            <div class="relative">
-                <%# 表示用（カンマあり） %>
-                <input type="text"
-                    id="income-input"
-                    placeholder="例：300,000"
-                    autocomplete="off"
-                    class="w-full h-11 px-4 pr-8 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-[#111718] dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors" />
-                <%# 送信用（数値のみ） %>
-                <input type="hidden"
-                    id="income-value"
-                    name="user[monthly_income]" />
-                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-[#618689] dark:text-slate-400">円</span>
-            </div>
-            <p class="text-xs text-[#618689] dark:text-slate-500 mt-1">入力した月収はあなただけが確認できます</p>
+          <%= f.label :monthly_income, "月収（円）",
+              class: "block text-sm font-medium text-[#111718] dark:text-[#7d8590] mb-1" %>
+          <div class="relative">
+            <input type="text"
+                   id="income-input"
+                   placeholder="例：300,000"
+                   autocomplete="off"
+                   class="w-full h-11 px-4 pr-8 rounded-lg bg-gray-50 dark:bg-[#1c2128] border border-gray-200 dark:border-[#21262d] text-[#111718] dark:text-[#e6edf3] placeholder-gray-400 dark:placeholder-[#7d8590] focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 dark:focus:ring-[#b5f714]/30 focus:border-[#13daec] dark:focus:border-[#b5f714] transition-colors" />
+            <input type="hidden" id="income-value" name="user[monthly_income]" />
+            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-[#618689] dark:text-[#7d8590]">円</span>
+          </div>
+          <p class="text-xs text-[#618689] dark:text-[#7d8590] mt-1">入力した月収はあなただけが確認できます</p>
         </div>
-
         <div class="flex gap-3">
           <button type="button"
                   onclick="document.getElementById('income-modal').classList.add('hidden')"
-                  class="flex-1 h-11 rounded-lg bg-gray-100 dark:bg-white/10 text-[#111718] dark:text-white font-bold text-sm hover:bg-gray-200 dark:hover:bg-white/20 transition-colors">
+                  class="flex-1 h-11 rounded-lg bg-gray-100 dark:bg-[#1c2128] text-[#111718] dark:text-[#e6edf3] font-bold text-sm hover:bg-gray-200 dark:hover:bg-[#21262d] transition-colors border border-transparent dark:border-[#21262d]">
             キャンセル
           </button>
           <%= f.submit "設定する",
-              class: "flex-1 h-11 rounded-lg bg-[#13daec] hover:bg-[#13daec]/90 text-[#111718] font-bold text-sm transition-all cursor-pointer" %>
+              class: "flex-1 h-11 rounded-lg bg-[#13daec] dark:bg-[#b5f714] hover:opacity-90 text-[#111718] font-bold text-sm transition-all cursor-pointer" %>
         </div>
       </div>
     <% end %>
-
   </div>
 </div>

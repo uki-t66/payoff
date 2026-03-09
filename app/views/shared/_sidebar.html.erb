@@ -28,22 +28,22 @@
 
 <%# サイドバー本体 %>
 <aside id="sidebar"
-       class="fixed top-0 left-0 z-40 h-full w-64 lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col bg-white dark:bg-[#102022] border-r-2 border-gray-200 dark:border-white/10"
+       class="fixed top-0 left-0 z-40 h-full w-64 lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col bg-white dark:bg-[#161b22] border-r-2 border-gray-200 dark:border-[#30363d]"
        data-dark-style="background: rgba(16,32,34,0.95); border-right: 1px solid rgba(255,255,255,0.08);">
 
   <%# サイドバーヘッダー %>
-  <div class="flex items-center justify-between h-16 px-4 border-b border-gray-100 dark:border-white/10 shrink-0">
+  <div class="flex items-center justify-between h-16 px-4 border-b border-gray-100 dark:border-[#30363d] shrink-0">
     <%= link_to dashboard_path, class: "flex items-center gap-2" do %>
       <div class="flex items-center justify-center w-7 h-7 rounded-lg bg-[#13daec]/20 text-[#13daec]">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
       </div>
-      <span class="font-bold text-[#111718] dark:text-white text-sm tracking-tight">FixedFlow</span>
+      <span class="font-bold text-[#111718] dark:text-[#e6edf3] text-sm tracking-tight">FixedFlow</span>
     <% end %>
 
     <%# 閉じるボタン（モバイルのみ） %>
-    <button class="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-gray-500 dark:text-slate-400 transition-colors"
+    <button class="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-[#1c2128] text-gray-500 dark:text-[#7d8590] transition-colors"
             onclick="document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('sidebar-overlay').classList.add('hidden');">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -56,7 +56,7 @@
     <% sidebar_items.each do |item| %>
       <% is_active = controller_name == item[:match] %>
       <%= link_to item[:path],
-          class: "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 #{is_active ? 'bg-[#13daec]/10 text-[#13daec] border border-[#13daec]/20' : 'text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-[#111718] dark:hover:text-white'}" do %>
+          class: "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 #{is_active ? 'bg-[#13daec]/10 text-[#13daec] border border-[#13daec]/20' : 'text-gray-600 dark:text-[#7d8590] hover:bg-gray-100 dark:hover:bg-[#1c2128] hover:text-[#111718] dark:hover:text-[#e6edf3]'}" do %>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <%= item[:icon].html_safe %>
         </svg>
@@ -69,14 +69,14 @@
   </nav>
 
   <%# ユーザー情報 %>
-  <div class="shrink-0 px-3 py-4 border-t border-gray-100 dark:border-white/10">
-    <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gray-50 dark:bg-white/5">
+  <div class="shrink-0 px-3 py-4 border-t border-gray-100 dark:border-[#30363d]">
+    <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gray-50 dark:bg-[#161b22]">
       <div class="w-8 h-8 rounded-full bg-[#13daec]/20 flex items-center justify-center shrink-0">
         <span class="text-sm font-bold text-[#13daec]"><%= current_user.name.slice(0, 1) %></span>
       </div>
       <div class="flex-1 min-w-0">
-        <p class="text-sm font-medium text-[#111718] dark:text-white truncate"><%= current_user.name %></p>
-        <p class="text-xs text-gray-500 dark:text-slate-500 truncate"><%= current_user.email %></p>
+        <p class="text-sm font-medium text-[#111718] dark:text-[#e6edf3] truncate"><%= current_user.name %></p>
+        <p class="text-xs text-gray-500 dark:text-[#7d8590] truncate"><%= current_user.email %></p>
       </div>
     </div>
   </div>

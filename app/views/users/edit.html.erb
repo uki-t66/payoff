@@ -1,15 +1,15 @@
 <div class="p-6 lg:p-10 max-w-2xl mx-auto flex flex-col gap-6">
 
   <div>
-    <h1 class="text-2xl font-black text-[#111718] dark:text-white">アカウント設定</h1>
-    <p class="text-sm text-[#618689] dark:text-slate-400 mt-1">アカウント情報の確認・変更ができます</p>
+    <h1 class="text-2xl font-black text-[#111718] dark:text-[#e6edf3]">アカウント設定</h1>
+    <p class="text-sm text-[#618689] dark:text-[#7d8590] mt-1">アカウント情報の確認・変更ができます</p>
   </div>
 
   <%# ユーザー名変更カード %>
-  <div class="bg-white dark:bg-[#1a2e30] rounded-2xl border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden">
-    <div class="px-6 py-4 border-b border-gray-100 dark:border-white/10">
-      <h2 class="text-base font-bold text-[#111718] dark:text-white">ユーザー名</h2>
-      <p class="text-sm text-[#618689] dark:text-slate-400 mt-0.5">表示名を変更できます</p>
+  <div class="bg-white dark:bg-[#1c2128] rounded-2xl border border-gray-200 dark:border-[#30363d] shadow-sm overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 dark:border-[#30363d]">
+      <h2 class="text-base font-bold text-[#111718] dark:text-[#e6edf3]">ユーザー名</h2>
+      <p class="text-sm text-[#618689] dark:text-[#7d8590] mt-0.5">表示名を変更できます</p>
     </div>
     <div class="p-6">
       <% if @user.errors[:name].any? %>
@@ -26,9 +26,9 @@
         <div class="flex gap-3 items-end">
           <div class="flex-1">
             <%= f.label :name, "ユーザー名",
-                class: "block text-sm font-medium text-[#111718] dark:text-slate-300 mb-1" %>
+                class: "block text-sm font-medium text-[#111718] dark:text-[#e6edf3] mb-1" %>
             <%= f.text_field :name,
-                class: "w-full h-11 px-4 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-[#111718] dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors" %>
+                class: "w-full h-11 px-4 rounded-lg bg-gray-50 dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] text-[#111718] dark:text-[#e6edf3] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors" %>
           </div>
           <%= f.submit "変更する",
               class: "h-11 px-5 rounded-lg bg-[#13daec] hover:bg-[#13daec]/90 text-[#111718] font-bold text-sm transition-all cursor-pointer shrink-0" %>
@@ -38,10 +38,10 @@
   </div>
 
   <%# 月収カード %>
-  <div class="bg-white dark:bg-[#1a2e30] rounded-2xl border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden">
-    <div class="px-6 py-4 border-b border-gray-100 dark:border-white/10">
-      <h2 class="text-base font-bold text-[#111718] dark:text-white">月収</h2>
-      <p class="text-sm text-[#618689] dark:text-slate-400 mt-0.5">手取りの月収入を設定できます</p>
+  <div class="bg-white dark:bg-[#1c2128] rounded-2xl border border-gray-200 dark:border-[#30363d] shadow-sm overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 dark:border-[#30363d]">
+      <h2 class="text-base font-bold text-[#111718] dark:text-[#e6edf3]">月収</h2>
+      <p class="text-sm text-[#618689] dark:text-[#7d8590] mt-0.5">手取りの月収入を設定できます</p>
     </div>
     <div class="p-6">
       <% if @user.errors[:monthly_income].any? %>
@@ -58,7 +58,7 @@
         <div class="flex gap-3 items-end">
           <div class="flex-1">
             <%= f.label :monthly_income, "月収（円）",
-                class: "block text-sm font-medium text-[#111718] dark:text-slate-300 mb-1" %>
+                class: "block text-sm font-medium text-[#111718] dark:text-[#e6edf3] mb-1" %>
             <div class="relative">
               <%# 表示用（カンマあり） %>
               <input type="text"
@@ -66,13 +66,13 @@
                     value="<%= number_with_delimiter(@user.monthly_income) if @user.monthly_income %>"
                     placeholder="例：300,000"
                     autocomplete="off"
-                    class="w-full h-11 px-4 pr-8 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-[#111718] dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors" />
+                    class="w-full h-11 px-4 pr-8 rounded-lg bg-gray-50 dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] text-[#111718] dark:text-[#e6edf3] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors" />
               <%# 送信用（数値のみ） %>
               <input type="hidden"
                     id="income-value-settings"
                     name="user[monthly_income]"
                     value="<%= @user.monthly_income %>" />
-              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-[#618689] dark:text-slate-400">円</span>
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-[#618689] dark:text-[#7d8590]">円</span>
             </div>
           </div>
           <button type="submit"
@@ -85,10 +85,10 @@
   </div>
 
   <%# メールアドレス変更カード %>
-  <div class="bg-white dark:bg-[#1a2e30] rounded-2xl border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden">
-  <div class="px-6 py-4 border-b border-gray-100 dark:border-white/10">
-    <h2 class="text-base font-bold text-[#111718] dark:text-white">メールアドレス</h2>
-    <p class="text-sm text-[#618689] dark:text-slate-400 mt-0.5">ログインに使用するメールアドレスを変更できます</p>
+  <div class="bg-white dark:bg-[#1c2128] rounded-2xl border border-gray-200 dark:border-[#30363d] shadow-sm overflow-hidden">
+  <div class="px-6 py-4 border-b border-gray-100 dark:border-[#30363d]">
+    <h2 class="text-base font-bold text-[#111718] dark:text-[#e6edf3]">メールアドレス</h2>
+    <p class="text-sm text-[#618689] dark:text-[#7d8590] mt-0.5">ログインに使用するメールアドレスを変更できます</p>
   </div>
   <div class="p-6">
     <% if @user.errors[:email].any? %>
@@ -105,9 +105,9 @@
       <div class="flex gap-3 items-end">
         <div class="flex-1">
           <%= f.label :email, "メールアドレス",
-              class: "block text-sm font-medium text-[#111718] dark:text-slate-300 mb-1" %>
+              class: "block text-sm font-medium text-[#111718] dark:text-[#e6edf3] mb-1" %>
           <%= f.email_field :email,
-              class: "w-full h-11 px-4 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-[#111718] dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors" %>
+              class: "w-full h-11 px-4 rounded-lg bg-gray-50 dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] text-[#111718] dark:text-[#e6edf3] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors" %>
         </div>
         <%= f.submit "変更する",
             class: "h-11 px-5 rounded-lg bg-[#13daec] hover:bg-[#13daec]/90 text-[#111718] font-bold text-sm transition-all cursor-pointer shrink-0" %>
@@ -117,10 +117,10 @@
   </div>
 
   <%# パスワード変更カード %>
-  <div class="bg-white dark:bg-[#1a2e30] rounded-2xl border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden">
-  <div class="px-6 py-4 border-b border-gray-100 dark:border-white/10">
-    <h2 class="text-base font-bold text-[#111718] dark:text-white">パスワード</h2>
-    <p class="text-sm text-[#618689] dark:text-slate-400 mt-0.5">現在のパスワードを入力して変更できます</p>
+  <div class="bg-white dark:bg-[#1c2128] rounded-2xl border border-gray-200 dark:border-[#30363d] shadow-sm overflow-hidden">
+  <div class="px-6 py-4 border-b border-gray-100 dark:border-[#30363d]">
+    <h2 class="text-base font-bold text-[#111718] dark:text-[#e6edf3]">パスワード</h2>
+    <p class="text-sm text-[#618689] dark:text-[#7d8590] mt-0.5">現在のパスワードを入力して変更できます</p>
   </div>
   <div class="p-6">
     <% if @user.errors[:current_password].any? || @user.errors[:password].any? || @user.errors[:password_confirmation].any? %>
@@ -144,13 +144,13 @@
         <%# 現在のパスワード %>
         <div>
           <%= f.label :current_password, "現在のパスワード",
-              class: "block text-sm font-medium text-[#111718] dark:text-slate-300 mb-1" %>
+              class: "block text-sm font-medium text-[#111718] dark:text-[#e6edf3] mb-1" %>
           <div class="relative">
             <%= f.password_field :current_password,
                 value: params.dig(:user, :current_password),
                 autocomplete: "current-password",
                 id: "current_password_field",
-                class: "w-full h-11 px-4 pr-11 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-[#111718] dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors" %>
+                class: "w-full h-11 px-4 pr-11 rounded-lg bg-gray-50 dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] text-[#111718] dark:text-[#e6edf3] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors" %>
             <button type="button"
                     onclick="togglePasswordVisibility('current_password_field', this)"
                     class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-slate-300 transition-colors">
@@ -165,13 +165,13 @@
         <%# 新しいパスワード %>
         <div>
           <%= f.label :password, "新しいパスワード",
-              class: "block text-sm font-medium text-[#111718] dark:text-slate-300 mb-1" %>
+              class: "block text-sm font-medium text-[#111718] dark:text-[#e6edf3] mb-1" %>
           <div class="relative">
             <%= f.password_field :password,
                 value: params.dig(:user, :password),
                 autocomplete: "new-password",
                 id: "new_password_field",
-                class: "w-full h-11 px-4 pr-11 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-[#111718] dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors" %>
+                class: "w-full h-11 px-4 pr-11 rounded-lg bg-gray-50 dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] text-[#111718] dark:text-[#e6edf3] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors" %>
             <button type="button"
                     onclick="togglePasswordVisibility('new_password_field', this)"
                     class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-slate-300 transition-colors">
@@ -186,13 +186,13 @@
         <%# 確認用パスワード %>
         <div>
           <%= f.label :password_confirmation, "新しいパスワード（確認）",
-              class: "block text-sm font-medium text-[#111718] dark:text-slate-300 mb-1" %>
+              class: "block text-sm font-medium text-[#111718] dark:text-[#e6edf3] mb-1" %>
           <div class="relative">
             <%= f.password_field :password_confirmation,
                 value: params.dig(:user, :password_confirmation),
                 autocomplete: "new-password",
                 id: "password_confirmation_field",
-                class: "w-full h-11 px-4 pr-11 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-[#111718] dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors" %>
+                class: "w-full h-11 px-4 pr-11 rounded-lg bg-gray-50 dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] text-[#111718] dark:text-[#e6edf3] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors" %>
             <button type="button"
                     onclick="togglePasswordVisibility('password_confirmation_field', this)"
                     class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-slate-300 transition-colors">
@@ -214,10 +214,10 @@
   </div>
 
   <%# アカウント削除カード %>
-  <div class="bg-white dark:bg-[#1a2e30] rounded-2xl border border-red-200 dark:border-red-500/20 shadow-sm overflow-hidden">
+  <div class="bg-white dark:bg-[#1c2128] rounded-2xl border border-red-200 dark:border-red-500/20 shadow-sm overflow-hidden">
     <div class="px-6 py-4 border-b border-red-100 dark:border-red-500/20">
       <h2 class="text-base font-bold text-red-600 dark:text-red-400">アカウント削除</h2>
-      <p class="text-sm text-[#618689] dark:text-slate-400 mt-0.5">一度削除すると元に戻せません</p>
+      <p class="text-sm text-[#618689] dark:text-[#7d8590] mt-0.5">一度削除すると元に戻せません</p>
     </div>
     <div class="p-6 flex justify-end">
       <button type="button"
@@ -237,7 +237,7 @@
     <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
 
     <%# モーダル本体 %>
-    <div class="relative z-10 w-full max-w-md bg-white dark:bg-[#1a2e30] rounded-2xl border border-gray-200 dark:border-white/10 shadow-2xl p-6 flex flex-col gap-5">
+    <div class="relative z-10 w-full max-w-md bg-white dark:bg-[#1c2128] rounded-2xl border border-gray-200 dark:border-[#30363d] shadow-2xl p-6 flex flex-col gap-5">
 
       <%# アイコン %>
       <div class="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 dark:bg-red-500/10 mx-auto">
@@ -248,15 +248,15 @@
 
       <%# テキスト %>
       <div class="text-center">
-        <h3 class="text-lg font-bold text-[#111718] dark:text-white mb-2">アカウントを削除しますか？</h3>
-        <p class="text-sm text-[#618689] dark:text-slate-400">この操作は取り消せません。登録済みの固定費データもすべて削除されます。</p>
+        <h3 class="text-lg font-bold text-[#111718] dark:text-[#e6edf3] mb-2">アカウントを削除しますか？</h3>
+        <p class="text-sm text-[#618689] dark:text-[#7d8590]">この操作は取り消せません。登録済みの固定費データもすべて削除されます。</p>
       </div>
 
       <%# ボタン %>
       <div class="flex gap-3">
         <button type="button"
                 onclick="document.getElementById('delete-modal').classList.add('hidden')"
-                class="flex-1 h-12 rounded-lg bg-gray-100 dark:bg-white/10 text-[#111718] dark:text-white font-bold text-sm hover:bg-gray-200 dark:hover:bg-white/20 transition-colors">
+                class="flex-1 h-12 rounded-lg bg-gray-100 dark:bg-[#1c2128] text-[#111718] dark:text-[#e6edf3] font-bold text-sm hover:bg-gray-200 dark:hover:bg-[#30363d] transition-colors">
           キャンセル
         </button>
         <%= button_to "削除する", user_path(@user), method: :delete,

@@ -13,3 +13,14 @@
 button, input[type="submit"] {
   cursor: pointer;
 }
+
+/* ダークモード基本カラー変数 */
+.dark {
+  --color-bg: #0d1117;
+  --color-surface: #161b22;
+  --color-surface-2: #1c2128;
+  --color-border: #21262d;
+  --color-text: #e6edf3;
+  --color-text-sub: #7d8590;
+  --color-accent: #b5f714;
+}
