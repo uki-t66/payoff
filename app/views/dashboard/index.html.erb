@@ -108,7 +108,7 @@
   </div>
 
   <%# 3カラムカード %>
-  <div class="grid gap-4 lg:grid-cols-3">
+  <div class="grid gap-4 lg:grid-cols-3 items-stretch">
 
     <%# 収入利用率ドーナツグラフ %>
     <div class="bg-white dark:bg-[#1c2128] rounded-2xl border border-gray-200 dark:border-[#30363d] p-6 shadow-sm flex flex-col gap-4">
@@ -179,18 +179,33 @@
     </div>
 
     <%# 直近の支払い %>
-    <div class="lg:col-span-2 bg-white dark:bg-[#1c2128] rounded-2xl border border-gray-200 dark:border-[#30363d] shadow-sm overflow-hidden">
-      <div class="px-6 py-4 border-b border-gray-100 dark:border-[#30363d] flex items-center justify-between">
+    <div class="lg:col-span-2 bg-white dark:bg-[#1c2128] rounded-2xl border border-gray-200 dark:border-[#30363d] shadow-sm overflow-hidden flex flex-col">
+      <div class="px-6 py-4 border-b border-gray-100 dark:border-[#30363d] flex items-center justify-between shrink-0">
         <div>
           <p class="text-sm font-bold text-[#111718] dark:text-[#e6edf3]">直近の支払い</p>
-          <p class="text-xs text-[#618689] dark:text-[#7d8590] mt-0.5">支払日順</p>
+          <p class="text-xs text-[#618689] dark:text-[#7d8590] mt-0.5">7日以内</p>
         </div>
         <%= link_to "すべて見る", fixed_expenses_path,
             class: "text-xs font-bold text-[#13daec] hover:underline uppercase tracking-wide" %>
       </div>
-      <% if @fixed_expenses.any? %>
+
+      <% if @upcoming_payments.any? %>
         <div class="divide-y divide-gray-100 dark:divide-[#30363d]">
-          <% @fixed_expenses.first(5).each do |fe| %>
+          <% @upcoming_payments.each do |item| %>
+            <% fe = item[:expense] %>
+            <% days = item[:days_until] %>
+            <%
+              label = case days
+                      when 0 then "今日"
+                      when 1 then "明日"
+                      else "#{days}日後"
+                      end
+              label_class = case days
+                            when 0, 1 then "bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-400"
+                            when 2, 3 then "bg-yellow-100 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400"
+                            else "bg-gray-100 dark:bg-[#161b22] text-[#618689] dark:text-[#7d8590]"
+                            end
+            %>
             <div class="flex items-center justify-between px-6 py-3.5 hover:bg-gray-50 dark:hover:bg-[#161b22] transition-colors">
               <div class="flex items-center gap-3">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
@@ -202,15 +217,16 @@
                   <p class="text-xs text-[#618689] dark:text-[#7d8590]">毎月<%= fe.payment_day %>日</p>
                 </div>
               </div>
-              <p class="text-sm font-bold text-[#111718] dark:text-[#e6edf3]">−¥<%= number_with_delimiter(fe.fixed_cost_amount) %></p>
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-bold px-2 py-1 rounded-lg <%= label_class %>"><%= label %></span>
+                <p class="text-sm font-bold text-[#111718] dark:text-[#e6edf3]">−¥<%= number_with_delimiter(fe.fixed_cost_amount) %></p>
+              </div>
             </div>
           <% end %>
         </div>
       <% else %>
-        <div class="flex flex-col items-center justify-center py-12 gap-2">
-          <p class="text-sm text-[#618689] dark:text-[#7d8590]">固定費が登録されていません</p>
-          <%= link_to "固定費を登録する", new_fixed_expense_path,
-              class: "text-xs font-bold text-[#13daec] hover:underline" %>
+        <div class="flex-1 flex flex-col items-center justify-center gap-2">
+          <p class="text-sm text-[#618689] dark:text-[#7d8590]">7日以内の支払いはありません</p>
         </div>
       <% end %>
     </div>
