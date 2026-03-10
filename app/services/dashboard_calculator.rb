@@ -37,6 +37,19 @@ class DashboardCalculator
     end.sort_by { |item| item[:days_until] }
   end
 
+  def category_breakdown
+    @user.fixed_expenses
+        .where(is_active: true)
+        .includes(:category)
+        .group_by(&:category)
+        .map do |category, expenses|
+          amount = expenses.sum(&:fixed_cost_amount)
+          rate = total_fixed_cost > 0 ? (amount.to_f / total_fixed_cost * 100).round(1) : 0
+          { category: category, amount: amount, rate: rate }
+        end
+        .sort_by { |item| -item[:amount] }
+  end
+
   private
 
   def days_until_payment(payment_day, today)
