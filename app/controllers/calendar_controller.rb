@@ -15,11 +15,13 @@ class CalendarController < ApplicationController
     end_date   = start_date + 41
 
     @calendar_days = (start_date..end_date).to_a
+    @weeks_count   = @calendar_days.size / 7
 
     # 固定費をpayment_day => [fixed_expense] のHashで保持
     fixed_expenses = current_user.fixed_expenses
                                  .where(is_active: true)
                                  .includes(:category)
     @events_by_day = fixed_expenses.group_by(&:payment_day)
+    @calc = DashboardCalculator.new(current_user)
   end
 end
