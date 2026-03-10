@@ -6,5 +6,6 @@ class DashboardController < ApplicationController
     @fixed_expenses = current_user.fixed_expenses
                                   .includes(:category)
                                   .order(:payment_day)
+    @upcoming_payments = @calc.upcoming_payments(7)
   end
 end
