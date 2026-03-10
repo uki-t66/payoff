@@ -1,42 +1,119 @@
 <%# app/views/calendar/index.html.erb %>
-<div class="h-screen overflow-hidden flex flex-col p-4 lg:p-6 gap-4">
+<% all_expenses = @events_by_day.values.flatten %>
 
-  <%# ヘッダー %>
-  <div class="shrink-0 flex items-center justify-between">
-    <div>
-      <h1 class="text-2xl font-black text-[#111718] dark:text-[#e6edf3]">
-        <%= @current_date.strftime("%Y年%-m月") %>
-      </h1>
-      <p class="text-xs text-[#618689] dark:text-[#7d8590] mt-0.5">固定費の支払日を確認できます</p>
-    </div>
+<div id="calendar-page" class="h-screen overflow-hidden flex flex-col p-4 lg:p-6 gap-4">
 
-    <div class="flex items-center gap-2">
-      <%= link_to calendar_path(year: @prev_month.year, month: @prev_month.month),
-          class: "flex items-center justify-center w-8 h-8 rounded-lg bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-[#30363d] hover:bg-gray-50 dark:hover:bg-[#161b22] text-[#618689] dark:text-[#7d8590] transition-colors" do %>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-        </svg>
-      <% end %>
-
-      <% unless @current_date.year == Date.today.year && @current_date.month == Date.today.month %>
-        <%= link_to "今月", calendar_path,
-            class: "h-8 px-3 rounded-lg bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-[#30363d] hover:bg-gray-50 dark:hover:bg-[#161b22] text-xs font-bold text-[#618689] dark:text-[#7d8590] transition-colors" %>
-      <% end %>
-
-      <%= link_to calendar_path(year: @next_month.year, month: @next_month.month),
-          class: "flex items-center justify-center w-8 h-8 rounded-lg bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-[#30363d] hover:bg-gray-50 dark:hover:bg-[#161b22] text-[#618689] dark:text-[#7d8590] transition-colors" do %>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
+  <%# タイトル %>
+  <div class="shrink-0">
+    <h1 class="text-2xl font-black text-[#111718] dark:text-[#e6edf3]">
+      <%= @current_date.strftime("%Y年%-m月") %>
+    </h1>
+    <div class="flex items-center gap-3 mt-0.5">
+      <p class="text-xs text-[#618689] dark:text-[#7d8590]">固定費の支払日を管理できます</p>
+      <% if @calc.income_set? %>
+        <span class="inline-flex items-center gap-1 text-xs font-bold <%= @calc.usage_rate > 50 ? 'text-yellow-500' : 'text-[#13daec]' %>">
+          <span class="w-1.5 h-1.5 rounded-full <%= @calc.usage_rate > 50 ? 'bg-yellow-500' : 'bg-[#13daec]' %>"></span>
+          収入利用率 <%= @calc.usage_rate %>%
+        </span>
       <% end %>
     </div>
   </div>
 
-  <%# カレンダーグリッド %>
+  <%# サマリーカード3枚（独立） %>
+  <%
+    today    = Date.today
+    upcoming = @current_date.month == today.month ?
+      all_expenses.select { |fe| fe.payment_day >= today.day }.min_by(&:payment_day) :
+      all_expenses.min_by(&:payment_day)
+  %>
+  <div class="shrink-0 grid grid-cols-3 gap-4">
+
+    <div class="bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] shadow-sm px-5 py-4">
+      <p class="text-[10px] font-bold tracking-widest uppercase text-[#618689] dark:text-[#7d8590]">今月の固定費</p>
+      <p class="text-xl font-black text-[#111718] dark:text-[#e6edf3] mt-1">
+        ¥<%= number_with_delimiter(all_expenses.sum(&:fixed_cost_amount)) %>
+      </p>
+      <p class="text-[10px] text-[#618689] dark:text-[#7d8590] mt-0.5"><%= all_expenses.size %>件</p>
+    </div>
+
+    <div class="bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] shadow-sm px-5 py-4">
+      <p class="text-[10px] font-bold tracking-widest uppercase text-[#618689] dark:text-[#7d8590]">今月使えるお金</p>
+      <% if @calc.income_set? %>
+        <p class="text-xl font-black mt-1 <%= @calc.available_amount >= 0 ? 'text-[#13daec]' : 'text-red-500' %>">
+          ¥<%= number_with_delimiter(@calc.available_amount) %>
+        </p>
+        <div class="mt-1.5 w-full bg-gray-100 dark:bg-[#30363d] rounded-full h-1">
+          <div class="h-1 rounded-full <%= @calc.usage_rate > 50 ? 'bg-yellow-400' : 'bg-[#13daec]' %>"
+               style="width: <%= [@calc.usage_rate, 100].min %>%"></div>
+        </div>
+      <% else %>
+        <p class="text-xl font-black text-gray-300 dark:text-[#484f58] mt-1">---</p>
+        <p class="text-[10px] text-[#618689] dark:text-[#7d8590] mt-0.5">月収を設定してください</p>
+      <% end %>
+    </div>
+
+    <div class="bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] shadow-sm px-5 py-4">
+      <p class="text-[10px] font-bold tracking-widest uppercase text-[#618689] dark:text-[#7d8590]">直近の支払い</p>
+      <% if upcoming %>
+        <p class="text-xl font-black text-[#111718] dark:text-[#e6edf3] mt-1">
+          ¥<%= number_with_delimiter(upcoming.fixed_cost_amount) %>
+        </p>
+        <p class="text-[10px] text-[#618689] dark:text-[#7d8590] mt-0.5 truncate">
+          <%= upcoming.name %> · <%= upcoming.payment_day %>日
+        </p>
+      <% else %>
+        <p class="text-xl font-black text-gray-300 dark:text-[#484f58] mt-1">---</p>
+        <p class="text-[10px] text-[#618689] dark:text-[#7d8590] mt-0.5">今月の支払いなし</p>
+      <% end %>
+    </div>
+
+  </div>
+
+  <%# カレンダーカード %>
   <div class="flex-1 min-h-0 bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] shadow-sm overflow-hidden flex flex-col">
 
+    <%# 月ナビ：左右に矢印、中央に月名と今月ボタン %>
+    <div class="shrink-0 grid grid-cols-3 items-center px-4 py-2.5 border-b border-gray-100 dark:border-[#30363d]">
+
+      <%# 左：空白（バランス用） %>
+      <div></div>
+
+      <%# 中央：月名 %>
+      <div class="flex items-center justify-center">
+        <span class="text-sm font-black text-[#111718] dark:text-[#e6edf3]">
+          <%= @current_date.strftime("%Y年%-m月") %>
+        </span>
+      </div>
+
+      <%# 右：← 今月 → %>
+      <div class="flex items-center justify-end gap-1">
+        <button
+          class="flex items-center justify-center w-7 h-7 rounded-lg bg-gray-100 dark:bg-[#30363d] hover:bg-gray-200 dark:hover:bg-[#484f58] text-[#111718] dark:text-[#e6edf3] transition-colors"
+          data-action="calendar-nav#prev">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <% unless @current_date.year == Date.today.year && @current_date.month == Date.today.month %>
+          <button
+            class="inline-flex items-center justify-center h-7 px-2.5 rounded-lg bg-[#13daec] text-[11px] font-bold text-[#111718] hover:bg-[#0fc8d8] transition-colors"
+            data-action="calendar-nav#today">
+            今月
+          </button>
+        <% end %>
+        <button
+          class="flex items-center justify-center w-7 h-7 rounded-lg bg-gray-100 dark:bg-[#30363d] hover:bg-gray-200 dark:hover:bg-[#484f58] text-[#111718] dark:text-[#e6edf3] transition-colors"
+          data-action="calendar-nav#next">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
     <%# 曜日ヘッダー %>
-    <div class="grid grid-cols-7 border-b border-gray-200 dark:border-[#30363d] shrink-0">
+    <div class="grid grid-cols-7 border-b border-gray-100 dark:border-[#30363d] shrink-0">
       <% %w[SUN MON TUE WED THU FRI SAT].each_with_index do |day, i| %>
         <div class="py-2 text-center text-[10px] font-bold tracking-widest
           <%= i == 0 ? 'text-red-400' : i == 6 ? 'text-blue-400' : 'text-[#618689] dark:text-[#7d8590]' %>">
@@ -45,59 +122,66 @@
       <% end %>
     </div>
 
-    <%# 日付グリッド（6週） %>
-    <div class="flex-1 min-h-0 grid grid-cols-7 grid-rows-6">
-      <% @calendar_days.each do |date| %>
+    <%# 日付グリッド %>
+    <%
+      last_cell_date = @current_date.end_of_month.end_of_week(:saturday)
+      display_days   = @calendar_days.select { |d| d <= last_cell_date }
+      display_weeks  = (display_days.size / 7.0).ceil
+    %>
+    <div class="flex-1 min-h-0 grid grid-cols-7" style="grid-template-rows: repeat(<%= display_weeks %>, minmax(0, 1fr));">
+      <% display_days.each do |date| %>
         <%
           is_today         = date == Date.today
           is_current_month = date.month == @current_date.month
           events           = is_current_month ? (@events_by_day[date.day] || []) : []
           is_sunday        = date.wday == 0
           is_saturday      = date.wday == 6
+          has_events       = events.any?
         %>
-        <div class="border-b border-r border-gray-100 dark:border-[#30363d] p-1.5 flex flex-col gap-1 overflow-hidden
-          <%= is_current_month ? '' : 'bg-gray-50/60 dark:bg-[#161b22]/70' %>">
+        <div class="border-b border-r border-gray-100 dark:border-[#30363d] p-1.5 flex flex-col gap-1 overflow-hidden transition-colors
+          <%= has_events && is_current_month ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-[#161b22]' : '' %>
+          <%= !is_current_month ? 'bg-gray-50 dark:bg-[#1c2128]' : '' %>"
+          <% if has_events && is_current_month %>
+            data-calendar-day="<%= date.day %>"
+            data-calendar-date="<%= date.strftime('%-m月%-d日') %>"
+            data-calendar-weekday="<%= %w[日 月 火 水 木 金 土][date.wday] %>曜日"
+          <% end %>>
 
-          <%# 日付数字 %>
-          <div class="shrink-0">
-            <span class="inline-flex items-center justify-center w-6 h-6 text-xs font-bold rounded-full
-              <%= if is_today
-                    'bg-[#13daec] text-[#111718]'
-                  elsif !is_current_month
-                    'text-gray-300 dark:text-[#484f58]'
-                  elsif is_sunday
-                    'text-red-400'
-                  elsif is_saturday
-                    'text-blue-400'
-                  else
-                    'text-[#111718] dark:text-[#e6edf3]'
-                  end %>">
-              <%= date.day %>
-            </span>
-          </div>
-
-          <%# イベントタグ %>
-          <% if events.any? %>
-            <div class="flex flex-col gap-0.5 overflow-hidden">
-              <% events.first(2).each do |fe| %>
-                <div class="flex items-center gap-1 rounded-md px-1.5 py-0.5 overflow-hidden"
-                     style="background-color: <%= fe.category.color %>18;">
-                  <span class="w-1.5 h-1.5 rounded-full shrink-0"
-                        style="background-color: <%= fe.category.color %>;"></span>
-                  <span class="text-[10px] font-semibold truncate"
-                        style="color: <%= fe.category.color %>;">
-                    <%= fe.name %>
-                  </span>
-                  <span class="text-[10px] font-bold shrink-0 ml-auto"
-                        style="color: <%= fe.category.color %>;">
-                    ¥<%= number_with_delimiter(fe.fixed_cost_amount) %>
-                  </span>
-                </div>
-              <% end %>
-              <% if events.size > 2 %>
-                <p class="text-[10px] text-[#618689] dark:text-[#7d8590] px-1">+<%= events.size - 2 %>件</p>
-              <% end %>
+          <% if is_current_month %>
+            <div class="shrink-0">
+              <span class="inline-flex items-center justify-center w-6 h-6 text-xs font-bold rounded-full
+                <%= if is_today
+                      'bg-[#13daec] text-[#111718]'
+                    elsif is_sunday
+                      'text-red-400'
+                    elsif is_saturday
+                      'text-blue-400'
+                    else
+                      'text-[#111718] dark:text-[#e6edf3]'
+                    end %>">
+                <%= date.day %>
+              </span>
             </div>
+
+            <% if has_events %>
+              <div class="flex flex-col gap-0.5 overflow-hidden">
+                <% events.first(2).each do |fe| %>
+                  <div class="flex items-center gap-1 rounded-md px-1.5 py-0.5"
+                       style="background-color: <%= fe.category.color %>18;">
+                    <span class="w-1.5 h-1.5 rounded-full shrink-0" style="background-color: <%= fe.category.color %>;"></span>
+                    <span class="text-[10px] font-semibold truncate flex-1" style="color: <%= fe.category.color %>;">
+                      <%= fe.name %>
+                    </span>
+                    <span class="text-[10px] font-bold shrink-0" style="color: <%= fe.category.color %>;">
+                      ¥<%= number_with_delimiter(fe.fixed_cost_amount) %>
+                    </span>
+                  </div>
+                <% end %>
+                <% if events.size > 2 %>
+                  <p class="text-[10px] text-[#618689] dark:text-[#7d8590] px-1">+<%= events.size - 2 %>件</p>
+                <% end %>
+              </div>
+            <% end %>
           <% end %>
 
         </div>
@@ -106,37 +190,51 @@
 
   </div>
 
-  <%# サマリーバー %>
-  <% month_expenses = @events_by_day.values.flatten %>
-  <% if month_expenses.any? %>
-    <div class="shrink-0 bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] shadow-sm px-5 py-2.5 flex items-center gap-6">
+</div>
 
-      <%# 合計 %>
-      <div class="flex items-center gap-2">
-        <span class="text-xs text-[#618689] dark:text-[#7d8590]">合計</span>
-        <span class="text-sm font-black text-[#111718] dark:text-[#e6edf3]">
-          −¥<%= number_with_delimiter(month_expenses.sum(&:fixed_cost_amount)) %>
-        </span>
+<%# ポップアップモーダル %>
+<div id="calendar-popup"
+     class="fixed inset-0 z-50 items-center justify-center p-4"
+     style="display:none">
+  <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+  <div class="relative z-10 w-full max-w-sm bg-white dark:bg-[#1c2128] rounded-2xl border border-gray-200 dark:border-[#30363d] shadow-2xl overflow-hidden">
+    <div class="flex items-start justify-between px-5 pt-5 pb-3 border-b border-gray-100 dark:border-[#30363d]">
+      <div>
+        <p id="popup-date" class="text-lg font-black text-[#111718] dark:text-[#e6edf3]"></p>
+        <p id="popup-weekday" class="text-xs text-[#618689] dark:text-[#7d8590] mt-0.5"></p>
       </div>
-
-      <div class="w-px h-4 bg-gray-200 dark:bg-[#30363d]"></div>
-
-      <%# 件数 %>
-      <span class="text-xs text-[#618689] dark:text-[#7d8590]"><%= month_expenses.size %>件の固定費</span>
-
-      <div class="flex-1"></div>
-
-      <%# カテゴリ凡例 %>
-      <div class="flex items-center gap-3">
-        <% month_expenses.group_by { |fe| fe.category }.each do |category, _| %>
-          <div class="flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full" style="background-color: <%= category.color %>;"></span>
-            <span class="text-xs text-[#618689] dark:text-[#7d8590]"><%= category.name %></span>
-          </div>
-        <% end %>
-      </div>
-
+      <button data-action="calendar-popup#close"
+              class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-[#30363d] text-[#618689] dark:text-[#7d8590] transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
     </div>
-  <% end %>
+    <div class="px-5 py-3 border-b border-gray-100 dark:border-[#30363d]">
+      <p class="text-xs text-[#618689] dark:text-[#7d8590]">この日の支払い合計</p>
+      <p id="popup-total" class="text-2xl font-black text-[#111718] dark:text-[#e6edf3] mt-0.5"></p>
+    </div>
+    <div id="popup-list" class="px-4 py-3 flex flex-col gap-2 max-h-72 overflow-y-auto"></div>
+  </div>
+</div>
 
+<%# イベントデータ（JSファイルから参照） %>
+<script id="calendar-events-data" type="application/json">
+  <%= raw(@events_by_day.transform_values { |exps|
+    exps.map { |fe| {
+      name: fe.name,
+      amount: fe.fixed_cost_amount,
+      amount_formatted: number_with_delimiter(fe.fixed_cost_amount),
+      category_name: fe.category.name,
+      category_color: fe.category.color
+    }}
+  }.to_json) %>
+</script>
+
+<%# Stimulusナビ用データ %>
+<div id="calendar-nav-data"
+     class="hidden"
+     data-prev-url="<%= calendar_path(year: @prev_month.year, month: @prev_month.month) %>"
+     data-next-url="<%= calendar_path(year: @next_month.year, month: @next_month.month) %>"
+     data-today-url="<%= calendar_path %>">
 </div>
