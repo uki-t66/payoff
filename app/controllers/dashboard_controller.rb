@@ -7,5 +7,6 @@ class DashboardController < ApplicationController
                                   .includes(:category)
                                   .order(:payment_day)
     @upcoming_payments = @calc.upcoming_payments(7)
+    @category_breakdown = @calc.category_breakdown
   end
 end
