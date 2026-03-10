@@ -8,5 +8,6 @@ class DashboardController < ApplicationController
                                   .order(:payment_day)
     @upcoming_payments = @calc.upcoming_payments(7)
     @category_breakdown = @calc.category_breakdown
+    @paid_this_month = current_user.fixed_expenses.paid_this_month
   end
 end

@@ -5,43 +5,31 @@ function initDonutChart() {
   if (!canvas) return;
   if (typeof Chart === "undefined") return;
 
+  // 既存チャートがあれば破棄
   const existing = Chart.getChart(canvas);
   if (existing) existing.destroy();
 
-  const total = parseFloat(canvas.dataset.total);
-  const remaining = parseFloat(canvas.dataset.remaining);
-  const rate = parseFloat(canvas.dataset.rate);
+  const total = parseFloat(canvas.dataset.total) || 0;
+  const remaining = parseFloat(canvas.dataset.remaining) || 0;
+  const rate = parseFloat(canvas.dataset.rate) || 0;
   const isOver = rate > 50;
-
-  const usedColor = isOver ? "#ef4444" : "#C7F284";
-  const remainColor = isOver ? "#ef444420" : "#C7F28420";
 
   new Chart(canvas, {
     type: "doughnut",
     data: {
-      datasets: [
-        {
-          data: remaining >= 0 ? [total, remaining] : [total, 0],
-          backgroundColor: [usedColor, remainColor],
-          borderWidth: 0,
-          borderRadius: 4,
-          hoverOffset: 0,
-        },
-      ],
+      datasets: [{
+        data: [total, remaining],
+        backgroundColor: isOver ? ["#ef4444", "#2d333b"] : ["#C7F284", "#2d333b"],
+        borderWidth: 0,
+        hoverOffset: 0,
+      }]
     },
     options: {
-      cutout: "78%",
-      responsive: true,
-      maintainAspectRatio: true,
-      plugins: {
-        legend: { display: false },
-        tooltip: { enabled: false },
-      },
-      animation: {
-        animateRotate: true,
-        duration: 800,
-      },
-    },
+      responsive: false,        // ← ここが重要
+      cutout: "72%",
+      animation: { duration: 600 },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } }
+    }
   });
 }
 
