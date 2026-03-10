@@ -40,12 +40,12 @@ class DashboardCalculator
   private
 
   def days_until_payment(payment_day, today)
-    this_month = Date.new(today.year, today.month, [payment_day, Date.new(today.year, today.month, -1).day].min)
+    this_month = Date.new(today.year, today.month, [ payment_day, Date.new(today.year, today.month, -1).day ].min)
     if this_month >= today
       (this_month - today).to_i
     else
       next_month = today >> 1
-      next_date = Date.new(next_month.year, next_month.month, [payment_day, Date.new(next_month.year, next_month.month, -1).day].min)
+      next_date = Date.new(next_month.year, next_month.month, [ payment_day, Date.new(next_month.year, next_month.month, -1).day ].min)
       (next_date - today).to_i
     end
   end
