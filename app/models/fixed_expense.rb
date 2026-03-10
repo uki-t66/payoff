@@ -8,13 +8,21 @@ class FixedExpense < ApplicationRecord
   validates :payment_day, presence: true, numericality: { in: 1..31 }
 
   scope :upcoming_within, ->(days) {
-  today = Date.today
-  target_days = (0..days).map { |i| (today + i).day }.uniq
+    today = Date.today
+    target_days = (0..days).map { |i| (today + i).day }.uniq
 
-  where(payment_day: target_days, is_active: true)
-    .includes(:category)
-    .order(:payment_day)
-}
+    where(payment_day: target_days, is_active: true)
+      .includes(:category)
+      .order(:payment_day)
+   }
+
+  scope :paid_this_month, -> {
+    today = Date.today
+    where(is_active: true)
+      .where("payment_day < ?", today.day)
+      .includes(:category)
+      .order(:payment_day)
+  }
 
   private
 
