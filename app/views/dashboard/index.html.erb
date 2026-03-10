@@ -179,7 +179,7 @@
     </div>
 
     <%# 直近の支払い %>
-    <div class="lg:col-span-2 bg-white dark:bg-[#1c2128] rounded-2xl border border-gray-200 dark:border-[#30363d] shadow-sm overflow-hidden flex flex-col">
+    <div class="bg-white dark:bg-[#1c2128] rounded-2xl border border-gray-200 dark:border-[#30363d] shadow-sm overflow-hidden flex flex-col">
       <div class="px-6 py-4 border-b border-gray-100 dark:border-[#30363d] flex items-center justify-between shrink-0">
         <div>
           <p class="text-sm font-bold text-[#111718] dark:text-[#e6edf3]">直近の支払い</p>
@@ -227,6 +227,41 @@
       <% else %>
         <div class="flex-1 flex flex-col items-center justify-center gap-2">
           <p class="text-sm text-[#618689] dark:text-[#7d8590]">7日以内の支払いはありません</p>
+        </div>
+      <% end %>
+    </div>
+
+    <%# カテゴリ別内訳カード %>
+      <div class="bg-white dark:bg-[#1c2128] rounded-2xl border border-gray-200 dark:border-[#30363d] shadow-sm overflow-hidden flex flex-col">
+      <div class="px-6 py-4 border-b border-gray-100 dark:border-[#30363d] shrink-0">
+        <p class="text-sm font-bold text-[#111718] dark:text-[#e6edf3]">カテゴリ別内訳</p>
+        <p class="text-xs text-[#618689] dark:text-[#7d8590] mt-0.5">固定費合計に占める割合</p>
+      </div>
+      <% if @category_breakdown.any? %>
+        <div class="p-6 flex flex-col gap-4">
+          <% @category_breakdown.each do |item| %>
+            <div class="flex flex-col gap-1.5">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full shrink-0"
+                        style="background-color: <%= item[:category].color %>;"></span>
+                  <span class="text-sm font-medium text-[#111718] dark:text-[#e6edf3]"><%= item[:category].name %></span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="text-xs text-[#618689] dark:text-[#7d8590]">¥<%= number_with_delimiter(item[:amount]) %></span>
+                  <span class="text-xs font-bold text-[#111718] dark:text-[#e6edf3] w-10 text-right"><%= item[:rate] %>%</span>
+                </div>
+              </div>
+              <div class="w-full bg-gray-100 dark:bg-[#161b22] rounded-full h-1.5">
+                <div class="h-1.5 rounded-full transition-all duration-500"
+                    style="width: <%= item[:rate] %>%; background-color: <%= item[:category].color %>;"></div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="flex-1 flex items-center justify-center">
+          <p class="text-sm text-[#618689] dark:text-[#7d8590]">固定費が登録されていません</p>
         </div>
       <% end %>
     </div>
