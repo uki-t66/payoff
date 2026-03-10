@@ -28,4 +28,25 @@ class DashboardCalculator
 
     usage_rate > 50
   end
+
+  def upcoming_payments(days = 7)
+    today = Date.today
+    @user.fixed_expenses.upcoming_within(days).map do |fe|
+      days_until = days_until_payment(fe.payment_day, today)
+      { expense: fe, days_until: days_until }
+    end.sort_by { |item| item[:days_until] }
+  end
+
+  private
+
+  def days_until_payment(payment_day, today)
+    this_month = Date.new(today.year, today.month, [ payment_day, Date.new(today.year, today.month, -1).day ].min)
+    if this_month >= today
+      (this_month - today).to_i
+    else
+      next_month = today >> 1
+      next_date = Date.new(next_month.year, next_month.month, [ payment_day, Date.new(next_month.year, next_month.month, -1).day ].min)
+      (next_date - today).to_i
+    end
+  end
 end

@@ -7,6 +7,15 @@ class FixedExpense < ApplicationRecord
   validates :fixed_cost_amount, presence: true, numericality: { greater_than: 0 }
   validates :payment_day, presence: true, numericality: { in: 1..31 }
 
+  scope :upcoming_within, ->(days) {
+  today = Date.today
+  target_days = (0..days).map { |i| (today + i).day }.uniq
+
+  where(payment_day: target_days, is_active: true)
+    .includes(:category)
+    .order(:payment_day)
+}
+
   private
 
   def generate_uuid
