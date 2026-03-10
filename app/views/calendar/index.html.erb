@@ -1,0 +1,142 @@
+<%# app/views/calendar/index.html.erb %>
+<div class="h-screen overflow-hidden flex flex-col p-4 lg:p-6 gap-4">
+
+  <%# ヘッダー %>
+  <div class="shrink-0 flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-black text-[#111718] dark:text-[#e6edf3]">
+        <%= @current_date.strftime("%Y年%-m月") %>
+      </h1>
+      <p class="text-xs text-[#618689] dark:text-[#7d8590] mt-0.5">固定費の支払日を確認できます</p>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <%= link_to calendar_path(year: @prev_month.year, month: @prev_month.month),
+          class: "flex items-center justify-center w-8 h-8 rounded-lg bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-[#30363d] hover:bg-gray-50 dark:hover:bg-[#161b22] text-[#618689] dark:text-[#7d8590] transition-colors" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      <% end %>
+
+      <% unless @current_date.year == Date.today.year && @current_date.month == Date.today.month %>
+        <%= link_to "今月", calendar_path,
+            class: "h-8 px-3 rounded-lg bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-[#30363d] hover:bg-gray-50 dark:hover:bg-[#161b22] text-xs font-bold text-[#618689] dark:text-[#7d8590] transition-colors" %>
+      <% end %>
+
+      <%= link_to calendar_path(year: @next_month.year, month: @next_month.month),
+          class: "flex items-center justify-center w-8 h-8 rounded-lg bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-[#30363d] hover:bg-gray-50 dark:hover:bg-[#161b22] text-[#618689] dark:text-[#7d8590] transition-colors" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      <% end %>
+    </div>
+  </div>
+
+  <%# カレンダーグリッド %>
+  <div class="flex-1 min-h-0 bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] shadow-sm overflow-hidden flex flex-col">
+
+    <%# 曜日ヘッダー %>
+    <div class="grid grid-cols-7 border-b border-gray-200 dark:border-[#30363d] shrink-0">
+      <% %w[SUN MON TUE WED THU FRI SAT].each_with_index do |day, i| %>
+        <div class="py-2 text-center text-[10px] font-bold tracking-widest
+          <%= i == 0 ? 'text-red-400' : i == 6 ? 'text-blue-400' : 'text-[#618689] dark:text-[#7d8590]' %>">
+          <%= day %>
+        </div>
+      <% end %>
+    </div>
+
+    <%# 日付グリッド（6週） %>
+    <div class="flex-1 min-h-0 grid grid-cols-7 grid-rows-6">
+      <% @calendar_days.each do |date| %>
+        <%
+          is_today         = date == Date.today
+          is_current_month = date.month == @current_date.month
+          events           = is_current_month ? (@events_by_day[date.day] || []) : []
+          is_sunday        = date.wday == 0
+          is_saturday      = date.wday == 6
+        %>
+        <div class="border-b border-r border-gray-100 dark:border-[#30363d] p-1.5 flex flex-col gap-1 overflow-hidden
+          <%= is_current_month ? '' : 'bg-gray-50/60 dark:bg-[#161b22]/70' %>">
+
+          <%# 日付数字 %>
+          <div class="shrink-0">
+            <span class="inline-flex items-center justify-center w-6 h-6 text-xs font-bold rounded-full
+              <%= if is_today
+                    'bg-[#13daec] text-[#111718]'
+                  elsif !is_current_month
+                    'text-gray-300 dark:text-[#484f58]'
+                  elsif is_sunday
+                    'text-red-400'
+                  elsif is_saturday
+                    'text-blue-400'
+                  else
+                    'text-[#111718] dark:text-[#e6edf3]'
+                  end %>">
+              <%= date.day %>
+            </span>
+          </div>
+
+          <%# イベントタグ %>
+          <% if events.any? %>
+            <div class="flex flex-col gap-0.5 overflow-hidden">
+              <% events.first(2).each do |fe| %>
+                <div class="flex items-center gap-1 rounded-md px-1.5 py-0.5 overflow-hidden"
+                     style="background-color: <%= fe.category.color %>18;">
+                  <span class="w-1.5 h-1.5 rounded-full shrink-0"
+                        style="background-color: <%= fe.category.color %>;"></span>
+                  <span class="text-[10px] font-semibold truncate"
+                        style="color: <%= fe.category.color %>;">
+                    <%= fe.name %>
+                  </span>
+                  <span class="text-[10px] font-bold shrink-0 ml-auto"
+                        style="color: <%= fe.category.color %>;">
+                    ¥<%= number_with_delimiter(fe.fixed_cost_amount) %>
+                  </span>
+                </div>
+              <% end %>
+              <% if events.size > 2 %>
+                <p class="text-[10px] text-[#618689] dark:text-[#7d8590] px-1">+<%= events.size - 2 %>件</p>
+              <% end %>
+            </div>
+          <% end %>
+
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+
+  <%# サマリーバー %>
+  <% month_expenses = @events_by_day.values.flatten %>
+  <% if month_expenses.any? %>
+    <div class="shrink-0 bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] shadow-sm px-5 py-2.5 flex items-center gap-6">
+
+      <%# 合計 %>
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-[#618689] dark:text-[#7d8590]">合計</span>
+        <span class="text-sm font-black text-[#111718] dark:text-[#e6edf3]">
+          −¥<%= number_with_delimiter(month_expenses.sum(&:fixed_cost_amount)) %>
+        </span>
+      </div>
+
+      <div class="w-px h-4 bg-gray-200 dark:bg-[#30363d]"></div>
+
+      <%# 件数 %>
+      <span class="text-xs text-[#618689] dark:text-[#7d8590]"><%= month_expenses.size %>件の固定費</span>
+
+      <div class="flex-1"></div>
+
+      <%# カテゴリ凡例 %>
+      <div class="flex items-center gap-3">
+        <% month_expenses.group_by { |fe| fe.category }.each do |category, _| %>
+          <div class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full" style="background-color: <%= category.color %>;"></span>
+            <span class="text-xs text-[#618689] dark:text-[#7d8590]"><%= category.name %></span>
+          </div>
+        <% end %>
+      </div>
+
+    </div>
+  <% end %>
+
+</div>
