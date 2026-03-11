@@ -11,7 +11,7 @@ class FixedExpensesController < ApplicationController
 
   def new
     @fixed_expense = FixedExpense.new
-    @categories = Category.where(is_preset: true)
+    @categories = current_user.categories.order(:name)
   end
 
   def create
@@ -19,20 +19,20 @@ class FixedExpensesController < ApplicationController
     if @fixed_expense.save
       redirect_to fixed_expenses_path, notice: "固定費を登録しました"
     else
-      @categories = Category.where(is_preset: true)
+      @categories = current_user.categories.order(:name)
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
-    @categories = Category.where(is_preset: true)
+    @categories = current_user.categories.order(:name)
   end
 
   def update
     if @fixed_expense.update(fixed_expense_params)
       redirect_to fixed_expenses_path, notice: "固定費を更新しました"
     else
-      @categories = Category.where(is_preset: true)
+      @categories = current_user.categories.order(:name)
       render :edit, status: :unprocessable_entity
     end
   end
