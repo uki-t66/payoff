@@ -1,0 +1,52 @@
+<%# スマホ・タブレット（幅1024px未満）で全画面表示 %>
+<div id="mobile-guard"
+     class="hidden fixed inset-0 z-[9999] bg-[#0d1117] flex flex-col items-center justify-center p-8 text-center">
+
+  <%# アイコン %>
+  <div class="w-16 h-16 rounded-2xl bg-[#1c2128] border border-[#30363d] flex items-center justify-center mb-6">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#13daec]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+    </svg>
+  </div>
+
+  <%# ロゴ %>
+  <p class="text-xs font-bold tracking-widest uppercase text-[#13daec] mb-3">FixedFlow</p>
+
+  <%# タイトル %>
+  <h1 class="text-xl font-black text-[#e6edf3] mb-3">
+    PC専用アプリです
+  </h1>
+
+  <%# 説明 %>
+  <p class="text-sm text-[#7d8590] leading-relaxed max-w-xs">
+    FixedFlow は現在 PC ブラウザのみ対応しています。<br>
+    パソコンからアクセスしてご利用ください。
+  </p>
+
+  <%# 将来のモバイルアプリ誘導（現在は非表示コメントとして残す） %>
+  <%#
+  <div class="mt-8 p-4 rounded-xl bg-[#1c2128] border border-[#30363d] text-left max-w-xs w-full">
+    <p class="text-xs font-bold text-[#7d8590] mb-1">モバイルアプリ（近日公開）</p>
+    <p class="text-sm text-[#e6edf3]">App Store / Google Play で公開予定です。</p>
+  </div>
+  %>
+
+</div>
+
+<script>
+  (function () {
+    var guard = document.getElementById('mobile-guard');
+    function check() {
+      if (window.innerWidth < 1024) {
+        guard.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      } else {
+        guard.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    }
+    check();
+    window.addEventListener('resize', check);
+  })();
+</script>

@@ -19,6 +19,8 @@
   </head>
 
   <body class="bg-[#F5F9FC] dark:bg-[#0d1117] min-h-screen">
+    <%# スマホでこのアプリにアクセスしたときに表示されるHTMLファイル %>
+    <%= render "shared/mobile_guard" %>
 
     <% if logged_in? && controller_name != 'pages' %>
       <%= render "shared/sidebar" %>
