@@ -23,38 +23,7 @@
         <div class="flex flex-col gap-5">
 
           <%# カテゴリ %>
-            <div>
-            <%= f.label :category_id, "カテゴリ",
-                class: "block text-sm font-medium text-[#111718] dark:text-[#e6edf3] mb-1" %>
-            <div class="relative" data-custom-select data-select-day>
-                <%= f.select :category_id,
-                    @categories.map { |c| [c.name, c.id] },
-                    { prompt: "カテゴリを選択" },
-                    class: "hidden",
-                    data: { select_input: true } %>
-                <button type="button"
-                        class="w-full h-11 px-4 rounded-lg bg-gray-50 dark:bg-[#1c2128] border border-gray-200 dark:border-[#30363d] text-gray-400 dark:text-[#7d8590] text-left text-sm focus:outline-none focus:ring-2 focus:ring-[#13daec]/50 focus:border-[#13daec] transition-colors flex items-center justify-between"
-                        data-select-trigger>
-                <span data-select-label>カテゴリを選択</span>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                </svg>
-                </button>
-                <div class="hidden absolute z-50 w-full mt-1 rounded-lg bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-[#30363d] shadow-lg overflow-hidden"
-                    data-select-dropdown>
-                <div class="py-1">
-                    <div class="px-4 py-2.5 text-sm text-gray-400 dark:text-[#7d8590] hover:bg-gray-50 dark:hover:bg-[#1c2128] cursor-pointer"
-                        data-select-option=""
-                        data-select-text="カテゴリを選択">カテゴリを選択</div>
-                    <% @categories.each do |c| %>
-                    <div class="px-4 py-2.5 text-sm text-gray-900 dark:text-[#e6edf3] hover:bg-[#13daec]/10 hover:text-[#13daec] cursor-pointer transition-colors"
-                        data-select-option="<%= c.id %>"
-                        data-select-text="<%= c.name %>"><%= c.name %></div>
-                    <% end %>
-                </div>
-                </div>
-            </div>
-            </div>
+          <%= render "shared/category_select", form: f, categories: @categories %>
 
 
           <%# 名称 %>
