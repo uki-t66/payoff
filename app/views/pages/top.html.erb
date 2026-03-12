@@ -224,19 +224,18 @@
       </section>
 
       <%# CTAバナー %>
-      <section class="relative w-full rounded-2xl overflow-hidden text-white p-8 lg:p-16 flex flex-col items-center text-center gap-6"
-               style="background: linear-gradient(135deg, #0d1f21 0%, #111718 60%, #0d2a1a 100%);">
-        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#13daec 1px, transparent 1px); background-size: 20px 20px;"></div>
-        <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 50% 0%, rgba(19,218,236,0.15) 0%, transparent 60%);"></div>
+      <section class="relative w-full rounded-2xl overflow-hidden p-8 lg:p-16 flex flex-col items-center text-center gap-6 bg-[#f0fafa] dark:bg-[#0d1f21] border border-[#13daec]/20 dark:border-[#13daec]/10">
+        <div class="absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none" style="background-image: radial-gradient(#13daec 1px, transparent 1px); background-size: 20px 20px;"></div>
+        <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 50% 0%, rgba(19,218,236,0.08) 0%, transparent 60%);"></div>
         <div class="relative z-10 flex flex-col items-center gap-6 max-w-lg">
-          <h2 class="text-3xl lg:text-4xl font-black">今すぐ始めよう</h2>
-          <p class="text-gray-300 text-lg">登録無料。固定費を登録するだけで、今月使えるお金がすぐにわかる。</p>
+          <h2 class="text-3xl lg:text-4xl font-black text-[#111718] dark:text-[#e6edf3]">今すぐ始めよう</h2>
+          <p class="text-[#618689] dark:text-gray-300 text-lg">登録無料。固定費を登録するだけで、今月使えるお金がすぐにわかる。</p>
           <div class="flex flex-col sm:flex-row gap-3 w-full justify-center">
             <%= link_to "無料アカウントを作成", new_user_path,
                 class: "flex h-12 px-8 items-center justify-center rounded-xl text-base font-black text-[#111718] shadow-xl shadow-[#13daec]/30 transition-all hover:scale-105",
                 style: "background: linear-gradient(135deg, #13daec, #C7F284);" %>
             <%= link_to "ログインはこちら", login_path,
-                class: "flex h-12 px-8 items-center justify-center rounded-xl border border-white/20 bg-white/5 hover:bg-white/10 text-white text-base font-medium transition-all" %>
+                class: "flex h-12 px-8 items-center justify-center rounded-xl border border-[#13daec]/30 dark:border-white/20 bg-[#13daec]/5 dark:bg-white/5 hover:bg-[#13daec]/10 dark:hover:bg-white/10 text-[#111718] dark:text-white text-base font-medium transition-all" %>
           </div>
         </div>
       </section>
