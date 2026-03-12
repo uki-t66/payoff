@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @variant dark (&:where(.dark, .dark *));
-@import "./scrollbar.css";
 
 /* サイドバー開閉 */
 #sidebar {
@@ -24,4 +23,26 @@ button, input[type="submit"] {
   --color-text: #e6edf3;
   --color-text-sub: #7d8590;
   --color-accent: #b5f714;
+}
+
+/* スクロールバーをナチュラルに（Chrome/Safari/Edge） */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 116, 139, 0.3);
+  border-radius: 9999px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(100, 116, 139, 0.5);
+}
+
+/* Firefox */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.3) transparent;
 }
