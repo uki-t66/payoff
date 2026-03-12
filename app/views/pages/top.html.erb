@@ -1,12 +1,18 @@
 <%# app/views/pages/top.html.erb %>
-<div class="relative flex min-h-screen w-full flex-col bg-[#f6f8f8] dark:bg-[#161b22] text-[#111718] dark:text-slate-100 transition-colors duration-300">
+<div class="relative flex min-h-screen w-full flex-col bg-[#f6f8f8] dark:bg-[#0d1117] text-[#111718] dark:text-slate-100 transition-colors duration-300 overflow-x-hidden">
 
-  <%# 背景グリッドパターン %>
-  <div class="absolute inset-0 z-0 pointer-events-none opacity-40 dark:opacity-3"
-       style="background-image: linear-gradient(to right, #e5e7eb 1px, transparent 1px), linear-gradient(to bottom, #e5e7eb 1px, transparent 1px); background-size: 40px 40px;"></div>
+  <%# 背景：グロー＋グリッド %>
+  <div class="absolute inset-0 z-0 pointer-events-none">
+    <%# グリッドパターン %>
+    <div class="absolute inset-0 opacity-30 dark:opacity-10"
+         style="background-image: linear-gradient(to right, #e5e7eb 1px, transparent 1px), linear-gradient(to bottom, #e5e7eb 1px, transparent 1px); background-size: 40px 40px;"></div>
+    <%# トップ中央グロー %>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full opacity-20 dark:opacity-30 blur-3xl pointer-events-none"
+         style="background: radial-gradient(ellipse, #13daec 0%, transparent 70%);"></div>
+  </div>
 
   <%# ヘッダー %>
-  <header class="sticky top-0 z-50 flex items-center justify-between border-b border-gray-200 dark:border-[#30363d] bg-white/80 dark:bg-[#161b22]/80 backdrop-blur-md px-6 py-4 lg:px-40">
+  <header class="sticky top-0 z-50 flex items-center justify-between border-b border-gray-200 dark:border-[#30363d] bg-white/80 dark:bg-[#0d1117]/80 backdrop-blur-md px-6 py-4 lg:px-40">
     <div class="flex items-center gap-3">
       <div class="flex items-center justify-center w-8 h-8 rounded bg-[#13daec]/20 text-[#13daec]">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -17,16 +23,7 @@
     </div>
 
     <div class="hidden lg:flex flex-1 justify-end gap-8 items-center">
-
-     <%# ヘッダー昨日、料金項目 %>
-      <%#<nav class="flex items-center gap-8">
-        <a class="text-[#111718]/80 dark:text-[#e6edf3] hover:text-[#13daec] text-sm font-medium transition-colors" href="#">機能</a>
-        <a class="text-[#111718]/80 dark:text-[#e6edf3] hover:text-[#13daec] text-sm font-medium transition-colors" href="#">料金</a>
-      </nav>
-      %>
-      
       <div class="flex gap-3 items-center">
-        <%# テーマ切り替えボタン %>
         <button id="theme-toggle" class="flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 dark:bg-[#1c2128] hover:bg-gray-200 dark:hover:bg-[#30363d] text-[#111718] dark:text-[#e6edf3] transition-colors" aria-label="テーマ切り替え">
           <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
@@ -38,11 +35,10 @@
         <%= link_to "ログイン", login_path,
             class: "flex h-10 px-5 items-center justify-center rounded-lg bg-gray-100 dark:bg-[#1c2128] hover:bg-gray-200 dark:hover:bg-[#30363d] text-[#111718] dark:text-[#e6edf3] text-sm font-bold transition-colors" %>
         <%= link_to "無料で始める", new_user_path,
-            class: "flex h-10 px-5 items-center justify-center rounded-lg bg-[#13daec] hover:bg-[#13daec]/90 text-[#111718] text-sm font-bold shadow-sm shadow-[#13daec]/20 transition-all" %>
+            class: "flex h-10 px-5 items-center justify-center rounded-lg bg-[#13daec] hover:bg-[#0fc8d8] text-[#111718] text-sm font-bold shadow-lg shadow-[#13daec]/30 transition-all" %>
       </div>
     </div>
 
-    <%# モバイルメニュー %>
     <div class="lg:hidden flex items-center gap-2">
       <button id="theme-toggle-mobile" class="flex items-center justify-center w-9 h-9 rounded-lg bg-gray-100 dark:bg-[#1c2128] text-[#111718] dark:text-[#e6edf3] transition-colors">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -67,166 +63,140 @@
   <% end %>
 
   <main class="relative z-10 flex-1 flex flex-col items-center w-full">
-    <div class="max-w-7xl w-full px-4 lg:px-8 py-12 lg:py-20 flex flex-col gap-20">
+    <div class="max-w-7xl w-full px-4 lg:px-8 py-12 lg:py-20 flex flex-col gap-24">
 
-      <%# ヒーローセクション %>
-      <section class="grid lg:grid-cols-2 gap-12 items-center">
-        <div class="flex flex-col gap-6 order-2 lg:order-1">
-          <div class="inline-flex w-fit items-center gap-2 rounded-full border border-[#13daec]/30 bg-[#13daec]/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#111718] dark:text-[#e6edf3]">
-            <span class="w-2 h-2 rounded-full bg-[#13daec]"></span>
-            固定費管理ダッシュボード
-          </div>
-          <h1 class="text-4xl lg:text-6xl font-black tracking-tight text-[#111718] dark:text-[#e6edf3] leading-[1.1]">
-            今月、<span class="text-transparent bg-clip-text bg-linear-to-r from-[#13daec] to-teal-500">いくら使える？</span>を把握する
+      <%# ヒーローセクション：中央揃え %>
+      <section class="flex flex-col items-center text-center gap-8">
+
+        <%# バッジ %>
+        <div class="inline-flex items-center gap-2 rounded-full border border-[#13daec]/40 bg-[#13daec]/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#13daec]">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#13daec] animate-pulse"></span>
+          固定費管理ダッシュボード
+        </div>
+
+        <%# キャッチコピー %>
+        <div class="flex flex-col gap-4 max-w-4xl">
+          <h1 class="text-5xl lg:text-7xl font-black tracking-tight leading-[1.05]">
+            <span class="text-[#111718] dark:text-[#e6edf3]">今月、</span>
+            <span class="relative inline-block">
+              <span class="relative z-10"
+                    style="-webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background: linear-gradient(135deg, #13daec 0%, #06b6d4 50%, #C7F284 100%); -webkit-background-clip: text;">
+                いくら使える？
+              </span>
+              <%# アンダーラインアクセント %>
+              <span class="absolute -bottom-1 left-0 w-full h-1 rounded-full opacity-40"
+                    style="background: linear-gradient(90deg, #13daec, #C7F284);"></span>
+            </span>
           </h1>
-          <p class="text-lg text-[#618689] dark:text-[#7d8590] max-w-lg leading-relaxed">
-            家賃・保険・サブスク・ローン。毎月確実に消えていく固定費を一元管理。「気づいたらお金がない」を、もう繰り返さない。
-          </p>
-          <div class="flex flex-wrap gap-4 pt-4">
-            <%= link_to "ダッシュボードを試す", new_user_path,
-                class: "flex h-12 px-6 items-center justify-center rounded-lg bg-[#111718] dark:bg-white hover:bg-black dark:hover:bg-slate-100 text-white dark:text-[#111718] text-base font-bold transition-all shadow-lg" %>
-            <%= link_to "詳しく見る", "#",
-                class: "flex h-12 px-6 items-center justify-center rounded-lg bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-white/20 hover:border-[#13daec]/50 text-[#111718] dark:text-[#e6edf3] text-base font-medium transition-all" %>
-          </div>
+          <h1 class="text-5xl lg:text-7xl font-black tracking-tight leading-[1.05] text-[#111718] dark:text-[#e6edf3]">
+            を把握する
+          </h1>
+        </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 mt-8 border-t border-gray-200 dark:border-[#30363d]">
-            <div class="flex flex-col gap-2">
-              <div class="p-2 w-fit rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                </svg>
-              </div>
-              <h3 class="font-bold text-[#111718] dark:text-[#e6edf3]">即時計算</h3>
-              <p class="text-sm text-[#618689] dark:text-[#7d8590]">固定費を登録するだけで今月使えるお金を自動計算。</p>
-            </div>
-            <div class="flex flex-col gap-2">
-              <div class="p-2 w-fit rounded bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-              </div>
-              <h3 class="font-bold text-[#111718] dark:text-[#e6edf3]">カレンダー管理</h3>
-              <p class="text-sm text-[#618689] dark:text-[#7d8590]">支払日をカレンダーで可視化。引き落とし忘れをゼロに。</p>
-            </div>
-            <div class="flex flex-col gap-2">
-              <div class="p-2 w-fit rounded bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                </svg>
-              </div>
-              <h3 class="font-bold text-[#111718] dark:text-[#e6edf3]">支出上限の警告</h3>
-              <p class="text-sm text-[#618689] dark:text-[#7d8590]">固定費が収入の50%を超えると自動で警告を表示。</p>
-            </div>
+        <p class="text-lg text-[#618689] dark:text-[#7d8590] max-w-xl leading-relaxed">
+          家賃・保険・サブスク・ローン。毎月確実に消えていく固定費を一元管理。<br>
+          「気づいたらお金がない」を、もう繰り返さない。
+        </p>
+
+        <%# CTA ボタン：中央揃え・大きめ %>
+        <div class="flex flex-col items-center gap-3 pt-2">
+          <%= link_to "ダッシュボードを試す →", new_user_path,
+              class: "flex h-14 px-10 items-center justify-center rounded-xl text-base font-black text-[#111718] shadow-xl shadow-[#13daec]/40 transition-all duration-300",
+              style: "background: linear-gradient(135deg, #13daec 0%, #0fc8d8 60%, #C7F284 100%); transition: opacity 0.3s ease, box-shadow 0.3s ease;",
+              onmouseover: "this.style.opacity='0.85'; this.style.boxShadow='0 20px 40px rgba(19,218,236,0.4)';",
+              onmouseout: "this.style.opacity='1'; this.style.boxShadow='0 20px 25px rgba(19,218,236,0.25)';" %>
+          <p class="text-xs text-[#618689] dark:text-[#7d8590]">登録無料・クレジットカード不要</p>
+        </div>
+
+        <%# スタッツバッジ 3枚 %>
+        <div class="flex flex-wrap justify-center gap-4 pt-4">
+          <div class="flex items-center gap-2 rounded-full bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-[#30363d] px-4 py-2 shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span class="text-xs font-bold text-[#111718] dark:text-[#e6edf3]">即時計算</span>
+          </div>
+          <div class="flex items-center gap-2 rounded-full bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-[#30363d] px-4 py-2 shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-[#13daec]"></span>
+            <span class="text-xs font-bold text-[#111718] dark:text-[#e6edf3]">カレンダー管理</span>
+          </div>
+          <div class="flex items-center gap-2 rounded-full bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-[#30363d] px-4 py-2 shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+            <span class="text-xs font-bold text-[#111718] dark:text-[#e6edf3]">50%超えで自動警告</span>
           </div>
         </div>
 
         <%# ダッシュボードモックアップ %>
-        <div class="relative order-1 lg:order-2">
+        <div class="relative w-full max-w-3xl mt-8">
+          <%# グロー %>
+          <div class="absolute -inset-4 rounded-3xl opacity-20 blur-2xl pointer-events-none"
+               style="background: linear-gradient(135deg, #13daec, #C7F284);"></div>
           <div class="relative z-10 rounded-2xl bg-white dark:bg-[#1c2128] shadow-2xl border border-gray-100 dark:border-[#30363d] overflow-hidden">
-            <%# ウィンドウバー %>
-            <div class="flex items-center gap-2 px-4 py-3 border-b border-gray-100 dark:border-[#30363d]">
+            <div class="flex items-center gap-2 px-4 py-3 border-b border-gray-100 dark:border-[#30363d] bg-gray-50 dark:bg-[#161b22]">
               <div class="w-3 h-3 rounded-full bg-red-400/70"></div>
               <div class="w-3 h-3 rounded-full bg-yellow-400/70"></div>
               <div class="w-3 h-3 rounded-full bg-[#13daec]/70"></div>
-              <span class="ml-2 text-xs text-gray-400 dark:text-[#7d8590]">ダッシュボード</span>
+              <span class="ml-2 text-xs text-gray-400 dark:text-[#7d8590]">FixedFlow — ダッシュボード</span>
             </div>
-            <div class="p-6">
+            <div class="p-6 flex flex-col gap-4">
               <%# 警告バナー %>
-              <div class="flex items-center gap-2 rounded-lg bg-yellow-50 dark:bg-yellow-500/10 border border-yellow-200 dark:border-yellow-500/20 px-3 py-2 mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div class="flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 px-3 py-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                 </svg>
-                <span class="text-xs text-yellow-700 dark:text-yellow-400 font-medium">固定費が収入の50%を超えています</span>
+                <span class="text-xs text-red-700 dark:text-red-400 font-medium">固定費が収入の63%を占めています。固定費の見直しを検討してください。</span>
               </div>
-              <%# メインカード %>
-              <div class="rounded-xl bg-[#13daec]/10 border border-[#13daec]/20 p-4 mb-4 flex items-center justify-between">
-                <div>
-                  <p class="text-xs text-[#618689] dark:text-[#7d8590] mb-1">今月使えるお金</p>
-                  <p class="text-3xl font-bold text-[#111718] dark:text-[#13daec]">¥150,830</p>
-                  <p class="text-xs text-[#618689] dark:text-[#7d8590] mt-1">月収 ¥200,000 − 固定費 ¥49,170</p>
+              <%# 2カードグリッド %>
+              <div class="grid grid-cols-2 gap-3">
+                <div class="rounded-xl bg-gray-50 dark:bg-[#161b22] border border-gray-100 dark:border-[#30363d] p-4">
+                  <p class="text-xs font-bold tracking-widest uppercase text-[#13daec] mb-2">今月使えるお金</p>
+                  <p class="text-3xl font-black text-[#111718] dark:text-[#e6edf3]">¥111,100</p>
+                  <p class="text-xs text-[#618689] dark:text-[#7d8590] mt-1">月収 ¥300,000 − 固定費 ¥188,900</p>
                 </div>
-                <div class="text-right">
-                  <p class="text-xs text-[#618689] dark:text-[#7d8590] mb-1">固定費合計</p>
-                  <p class="text-xl font-bold text-[#111718] dark:text-[#e6edf3]">¥49,170</p>
-                </div>
-              </div>
-              <%# プログレスバー %>
-              <div class="w-full bg-gray-100 dark:bg-[#161b22] rounded-full h-2 mb-4">
-                <div class="bg-[#13daec] h-2 rounded-full" style="width: 69%"></div>
-              </div>
-              <%# サブカード %>
-              <div class="grid grid-cols-3 gap-3 mb-4">
-                <div class="rounded-lg bg-gray-50 dark:bg-[#161b22] border border-gray-100 dark:border-[#30363d] p-3 text-center">
-                  <p class="text-xs text-[#618689] dark:text-[#7d8590] mb-1">利用率</p>
-                  <p class="text-lg font-bold text-[#13daec]">69%</p>
-                </div>
-                <div class="rounded-lg bg-gray-50 dark:bg-[#161b22] border border-gray-100 dark:border-[#30363d] p-3 text-center">
-                  <p class="text-xs text-[#618689] dark:text-[#7d8590] mb-1">直近</p>
-                  <p class="text-xs font-bold text-red-500">明日 電気代</p>
-                </div>
-                <div class="rounded-lg bg-gray-50 dark:bg-[#161b22] border border-gray-100 dark:border-[#30363d] p-3 text-center">
-                  <p class="text-xs text-[#618689] dark:text-[#7d8590] mb-1">登録件数</p>
-                  <p class="text-lg font-bold text-[#111718] dark:text-[#e6edf3]">7件</p>
+                <div class="rounded-xl bg-gray-50 dark:bg-[#161b22] border border-gray-100 dark:border-[#30363d] p-4">
+                  <p class="text-xs font-bold tracking-widest uppercase text-[#618689] dark:text-[#7d8590] mb-2">固定費合計</p>
+                  <p class="text-3xl font-black text-[#111718] dark:text-[#e6edf3]">¥188,900</p>
+                  <div class="mt-2">
+                    <div class="flex justify-between text-xs mb-1">
+                      <span class="text-[#618689] dark:text-[#7d8590]">収入利用率</span>
+                      <span class="font-black text-yellow-500">63%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-[#30363d] rounded-full h-1.5">
+                      <div class="h-1.5 rounded-full bg-yellow-400" style="width:63%"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <%# 引き落とし履歴 %>
-              <div class="rounded-lg border border-gray-100 dark:border-[#30363d] overflow-hidden">
+              <%# 引き落とし履歴ミニ %>
+              <div class="rounded-xl border border-gray-100 dark:border-[#30363d] overflow-hidden">
                 <div class="flex justify-between items-center px-3 py-2 bg-gray-50 dark:bg-[#161b22] border-b border-gray-100 dark:border-[#30363d]">
-                  <span class="text-xs font-medium text-[#111718] dark:text-[#e6edf3]">直近の引き落とし履歴</span>
+                  <span class="text-xs font-bold text-[#111718] dark:text-[#e6edf3]">直近の引き落とし履歴</span>
                   <span class="text-xs text-[#13daec]">すべて見る →</span>
                 </div>
-                <div class="divide-gray-100/50 dark:divide-[#30363d]/50 divide-gray-100 dark:border-[#30363d]">
-                  <div class="flex items-center justify-between px-3 py-2">
-                    <span class="text-xs text-[#111718] dark:text-[#e6edf3]">Netflix</span>
-                    <span class="text-xs bg-[#13daec]/10 text-[#13daec] px-2 py-0.5 rounded-full">サブスク</span>
+                <div class="divide-y divide-gray-100 dark:divide-[#30363d]">
+                  <div class="flex items-center justify-between px-3 py-2.5">
+                    <span class="text-xs font-medium text-[#111718] dark:text-[#e6edf3]">Netflix</span>
+                    <span class="text-xs bg-[#13daec]/15 text-[#13daec] px-2 py-0.5 rounded-full font-medium">サブスク</span>
                     <span class="text-xs text-[#618689] dark:text-[#7d8590]">3月3日</span>
-                    <span class="text-xs font-medium text-[#111718] dark:text-[#e6edf3]">¥1,490</span>
+                    <span class="text-xs font-bold text-[#111718] dark:text-[#e6edf3]">−¥1,490</span>
                   </div>
-                  <div class="flex items-center justify-between px-3 py-2">
-                    <span class="text-xs text-[#111718] dark:text-[#e6edf3]">電気代</span>
-                    <span class="text-xs bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full">公共料金</span>
+                  <div class="flex items-center justify-between px-3 py-2.5">
+                    <span class="text-xs font-medium text-[#111718] dark:text-[#e6edf3]">電気代</span>
+                    <span class="text-xs bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full font-medium">公共料金</span>
                     <span class="text-xs text-[#618689] dark:text-[#7d8590]">3月10日</span>
-                    <span class="text-xs font-medium text-[#111718] dark:text-[#e6edf3]">¥8,500</span>
+                    <span class="text-xs font-bold text-[#111718] dark:text-[#e6edf3]">−¥8,500</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="absolute -top-6 -right-6 z-0 w-32 h-32 bg-[#13daec]/20 rounded-full blur-3xl"></div>
-          <div class="absolute -bottom-6 -left-6 z-0 w-40 h-40 bg-teal-400/10 rounded-full blur-3xl"></div>
         </div>
+
       </section>
 
-      <%# 統計バナー（保留中） %>
-      <%#
-      <section class="w-full bg-white dark:bg-[#1c2128] rounded-2xl border border-gray-200 dark:border-[#30363d] shadow-sm p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 divide-gray-100/50 dark:divide-[#30363d]/50 md:divide-gray-100/50 dark:divide-[#30363d]/50-0 md:divide-x divide-gray-100 dark:divide-white/10">
-        <div class="flex flex-col gap-1 px-4 text-center md:text-left">
-          <div class="text-[#618689] dark:text-[#7d8590] text-sm font-medium uppercase tracking-wider">平均固定費件数</div>
-          <div class="text-3xl font-black text-[#111718] dark:text-[#e6edf3]">8件</div>
-          <div class="text-[#13daec] text-sm font-bold flex items-center justify-center md:justify-start gap-1">↑ 見えていない固定費が多い</div>
-        </div>
-        <div class="flex flex-col gap-1 px-4 text-center md:text-left pt-4 md:pt-0">
-          <div class="text-[#618689] dark:text-[#7d8590] text-sm font-medium uppercase tracking-wider">収入に占める固定費</div>
-          <div class="text-3xl font-black text-[#111718] dark:text-[#e6edf3]">約50%</div>
-          <div class="text-green-600 dark:text-green-400 text-sm font-bold flex items-center justify-center md:justify-start gap-1">✓ 理想的な上限ライン</div>
-        </div>
-        <div class="flex flex-col gap-1 px-4 text-center md:text-left pt-4 md:pt-0">
-          <div class="text-[#618689] dark:text-[#7d8590] text-sm font-medium uppercase tracking-wider">把握できていない固定費</div>
-          <div class="text-3xl font-black text-[#111718] dark:text-[#e6edf3]">2〜3件</div>
-          <div class="text-[#13daec] text-sm font-bold flex items-center justify-center md:justify-start gap-1">↑ 平均的な見落とし数</div>
-        </div>
-        <div class="flex flex-col gap-1 px-4 text-center md:text-left pt-4 md:pt-0">
-          <div class="text-[#618689] dark:text-[#7d8590] text-sm font-medium uppercase tracking-wider">登録の手間</div>
-          <div class="text-3xl font-black text-[#111718] dark:text-[#e6edf3]">1回だけ</div>
-          <div class="text-green-600 dark:text-green-400 text-sm font-bold flex items-center justify-center md:justify-start gap-1">✓ 日々の入力不要</div>
-        </div>
-      </section>
-      %>
       <%# 機能紹介セクション %>
-      <section class="flex flex-col gap-12 py-12">
+      <section class="flex flex-col gap-12">
         <div class="text-center max-w-3xl mx-auto flex flex-col gap-4">
           <h2 class="text-3xl lg:text-5xl font-black tracking-tight text-[#111718] dark:text-[#e6edf3]">
-            固定費管理を<span class="text-[#13daec]">シンプルに</span>
+            固定費管理を<span style="-webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background: linear-gradient(135deg, #13daec, #C7F284); -webkit-background-clip: text;">シンプルに</span>
           </h2>
           <p class="text-lg text-[#618689] dark:text-[#7d8590]">
             難しい設定は不要。固定費を登録するだけで、あとは自動で管理してくれます。
@@ -234,66 +204,39 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="group bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] p-6 shadow-sm hover:shadow-xl hover:shadow-[#13daec]/5 hover:border-[#13daec]/40 transition-all duration-300">
-            <div class="w-12 h-12 rounded-lg bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4 group-hover:bg-[#13daec] group-hover:text-[#111718] transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-              </svg>
+          <% [
+            { icon: "M12 4v16m8-8H4", bg: "bg-blue-50 dark:bg-blue-500/10", color: "text-blue-600 dark:text-blue-400", title: "かんたん登録", desc: "カテゴリ・名前・金額・支払日を入力するだけ。一度登録すれば毎月自動で管理。" },
+            { icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z", bg: "bg-purple-50 dark:bg-purple-500/10", color: "text-purple-600 dark:text-purple-400", title: "収入利用率を可視化", desc: "固定費が収入の何%を占めているか一目でわかる。カテゴリ別の内訳も確認できる。" },
+            { icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z", bg: "bg-pink-50 dark:bg-pink-500/10", color: "text-pink-600 dark:text-pink-400", title: "カレンダーで管理", desc: "支払日をカレンダーで一覧表示。いつ何が引き落とされるか先読みできる。" },
+            { icon: "M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9", bg: "bg-teal-50 dark:bg-teal-500/10", color: "text-teal-600 dark:text-teal-400", title: "自動警告", desc: "固定費が収入の50%を超えたら自動で警告。家計の圧迫を未然に防ぐ。" }
+          ].each do |item| %>
+            <div class="group bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] p-6 shadow-sm hover:shadow-xl hover:shadow-[#13daec]/5 hover:border-[#13daec]/40 transition-all duration-300">
+              <div class="w-12 h-12 rounded-lg <%= item[:bg] %> <%= item[:color] %> flex items-center justify-center mb-4 group-hover:bg-[#13daec] group-hover:text-[#111718] transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<%= item[:icon] %>"/>
+                </svg>
+              </div>
+              <h3 class="text-lg font-bold text-[#111718] dark:text-[#e6edf3] mb-2"><%= item[:title] %></h3>
+              <p class="text-sm text-[#618689] dark:text-[#7d8590] leading-relaxed"><%= item[:desc] %></p>
             </div>
-            <h3 class="text-lg font-bold text-[#111718] dark:text-[#e6edf3] mb-2">かんたん登録</h3>
-            <p class="text-sm text-[#618689] dark:text-[#7d8590] leading-relaxed">カテゴリ・名前・金額・支払日を入力するだけ。一度登録すれば毎月自動で管理。</p>
-          </div>
-
-          <div class="group bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] p-6 shadow-sm hover:shadow-xl hover:shadow-[#13daec]/5 hover:border-[#13daec]/40 transition-all duration-300">
-            <div class="w-12 h-12 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4 group-hover:bg-[#13daec] group-hover:text-[#111718] transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-              </svg>
-            </div>
-            <h3 class="text-lg font-bold text-[#111718] dark:text-[#e6edf3] mb-2">収入利用率を可視化</h3>
-            <p class="text-sm text-[#618689] dark:text-[#7d8590] leading-relaxed">固定費が収入の何%を占めているか一目でわかる。カテゴリ別の内訳も確認できる。</p>
-          </div>
-
-          <div class="group bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] p-6 shadow-sm hover:shadow-xl hover:shadow-[#13daec]/5 hover:border-[#13daec]/40 transition-all duration-300">
-            <div class="w-12 h-12 rounded-lg bg-pink-50 dark:bg-pink-500/10 text-pink-600 dark:text-pink-400 flex items-center justify-center mb-4 group-hover:bg-[#13daec] group-hover:text-[#111718] transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-              </svg>
-            </div>
-            <h3 class="text-lg font-bold text-[#111718] dark:text-[#e6edf3] mb-2">カレンダーで管理</h3>
-            <p class="text-sm text-[#618689] dark:text-[#7d8590] leading-relaxed">支払日をカレンダーで一覧表示。いつ何が引き落とされるか先読みできる。</p>
-          </div>
-
-          <div class="group bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] p-6 shadow-sm hover:shadow-xl hover:shadow-[#13daec]/5 hover:border-[#13daec]/40 transition-all duration-300">
-            <div class="w-12 h-12 rounded-lg bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center mb-4 group-hover:bg-[#13daec] group-hover:text-[#111718] transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-              </svg>
-            </div>
-            <h3 class="text-lg font-bold text-[#111718] dark:text-[#e6edf3] mb-2">自動警告</h3>
-            <p class="text-sm text-[#618689] dark:text-[#7d8590] leading-relaxed">固定費が収入の50%を超えたら自動で警告。家計の圧迫を未然に防ぐ。</p>
-          </div>
-        </div>
-
-        <div class="flex justify-center pt-8">
-          <%= link_to "固定費を登録してみる", "#",
-              class: "flex h-12 px-8 items-center justify-center rounded-lg bg-[#13daec] hover:bg-[#13daec]/90 text-[#111718] text-base font-bold shadow-lg shadow-[#13daec]/30 transition-all" %>
+          <% end %>
         </div>
       </section>
 
       <%# CTAバナー %>
-      <section class="relative w-full rounded-2xl overflow-hidden bg-[#111718] dark:bg-[#0d1f21] text-white p-8 lg:p-16 flex flex-col md:flex-row items-center justify-between gap-8">
-        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#13daec 1px, transparent 1px); background-size: 20px 20px;"></div>
-        <div class="absolute right-0 top-0 w-1/2 h-full bg-linear-to-l from-[#13daec]/20 to-transparent pointer-events-none"></div>
-        <div class="relative z-10 max-w-lg">
-          <h2 class="text-3xl font-bold mb-4">今すぐ始めよう</h2>
-          <p class="text-gray-300 text-lg">登録無料。固定費を登録するだけで、今月使えるお金がすぐにわかる。</p>
-        </div>
-        <div class="relative z-10 flex gap-4 shrink-0 flex-col sm:flex-row w-full md:w-auto">
-          <%= link_to "無料アカウントを作成", new_user_path,
-              class: "flex h-12 px-6 items-center justify-center rounded-lg bg-[#13daec] hover:bg-white text-[#111718] text-base font-bold transition-all text-center" %>
-          <%= link_to "ログインはこちら", login_path,
-              class: "flex h-12 px-6 items-center justify-center rounded-lg border border-white/20 bg-white/5 hover:bg-white/10 text-white text-base font-medium transition-all text-center" %>
+      <section class="relative w-full rounded-2xl overflow-hidden p-8 lg:p-16 flex flex-col items-center text-center gap-6 bg-[#f0fafa] dark:bg-[#0d1f21] border border-[#13daec]/20 dark:border-[#13daec]/10">
+        <div class="absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none" style="background-image: radial-gradient(#13daec 1px, transparent 1px); background-size: 20px 20px;"></div>
+        <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 50% 0%, rgba(19,218,236,0.08) 0%, transparent 60%);"></div>
+        <div class="relative z-10 flex flex-col items-center gap-6 max-w-lg">
+          <h2 class="text-3xl lg:text-4xl font-black text-[#111718] dark:text-[#e6edf3]">今すぐ始めよう</h2>
+          <p class="text-[#618689] dark:text-gray-300 text-lg">登録無料。固定費を登録するだけで、今月使えるお金がすぐにわかる。</p>
+          <div class="flex flex-col sm:flex-row gap-3 w-full justify-center">
+            <%= link_to "無料アカウントを作成", new_user_path,
+                class: "flex h-12 px-8 items-center justify-center rounded-xl text-base font-black text-[#111718] shadow-xl shadow-[#13daec]/30 transition-all hover:scale-105",
+                style: "background: linear-gradient(135deg, #13daec, #C7F284);" %>
+            <%= link_to "ログインはこちら", login_path,
+                class: "flex h-12 px-8 items-center justify-center rounded-xl border border-[#13daec]/30 dark:border-white/20 bg-[#13daec]/5 dark:bg-white/5 hover:bg-[#13daec]/10 dark:hover:bg-white/10 text-[#111718] dark:text-white text-base font-medium transition-all" %>
+          </div>
         </div>
       </section>
 
@@ -301,7 +244,7 @@
   </main>
 
   <%# フッター %>
-  <footer class="border-t border-gray-200 dark:border-[#30363d] bg-white dark:bg-[#161b22] py-12">
+  <footer class="border-t border-gray-200 dark:border-[#30363d] bg-white dark:bg-[#0d1117] py-12">
     <div class="max-w-7xl mx-auto px-4 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
       <div class="flex items-center gap-2">
         <span class="text-[#111718] dark:text-[#e6edf3] font-bold">FixedFlow</span>
