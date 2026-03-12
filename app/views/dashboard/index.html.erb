@@ -11,7 +11,6 @@
 
   <%# バナー類 %>
   <div class="shrink-0 flex flex-col gap-2">
-    <%# 月収未設定バナー %>
     <% unless @calc.income_set? %>
       <div class="relative overflow-hidden rounded-xl border border-[#13daec]/30 dark:border-[#b5f714]/20 bg-[#13daec]/5 dark:bg-[#b5f714]/5 px-4 py-2.5 flex items-center justify-between gap-4">
         <div class="flex items-center gap-3">
@@ -27,8 +26,6 @@
         </button>
       </div>
     <% end %>
-
-    <%# 警告バナー %>
     <% if @calc.income_set? && @calc.over_budget? %>
       <div class="flex items-center gap-3 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 px-4 py-2.5">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -41,8 +38,6 @@
 
   <%# ヒーローカード 2枚 %>
   <div class="shrink-0 grid gap-3 lg:grid-cols-2">
-
-    <%# 左：今月使えるお金 %>
     <div class="relative overflow-hidden rounded-xl bg-white dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] px-5 py-4 shadow-sm">
       <div class="absolute inset-0 pointer-events-none"
            style="background: radial-gradient(ellipse at 100% 0%, rgba(19,218,236,0.07) 0%, transparent 60%);"></div>
@@ -61,8 +56,6 @@
         <% end %>
       </div>
     </div>
-
-    <%# 右：固定費合計 ＋ 収入利用率 %>
     <div class="relative overflow-hidden rounded-xl bg-white dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] px-5 py-4 shadow-sm">
       <div class="absolute inset-0 pointer-events-none"
            style="background: radial-gradient(ellipse at 0% 100%, rgba(19,218,236,0.05) 0%, transparent 60%);"></div>
@@ -86,14 +79,15 @@
         <% end %>
       </div>
     </div>
-
   </div>
 
-  <%# 3カラム＋履歴 下段 %>
-  <div class="flex-1 min-h-0 max-h-none grid gap-3 lg:grid-cols-3">
+  <%# 3カラム %>
+  <%# flex-1 min-h-0 で残り高さを確保、各カードも min-h-0 でオーバーフロー制御 %>
+  <div class="flex-1 min-h-0 grid gap-3 lg:grid-cols-3">
 
     <%# 収入利用率ドーナツ %>
-    <div class="bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] p-4 shadow-sm flex flex-col justify-between overflow-hidden">
+    
+    <div class="bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] p-4 shadow-sm flex flex-col gap-2 min-h-0 overflow-y-auto scrollbar-thin">
       <div class="shrink-0">
         <p class="text-xs font-bold text-[#111718] dark:text-[#e6edf3]">収入利用率</p>
         <p class="text-xs text-[#618689] dark:text-[#7d8590]">固定費 ÷ 月収</p>
@@ -112,7 +106,8 @@
             <span class="text-xs text-[#618689] dark:text-[#7d8590]">利用中</span>
           </div>
         </div>
-        <div class="grid grid-cols-2 gap-1.5">
+        <%# ミニカード3枚：shrink-0で縦縮小時も消えないように %>
+        <div class="shrink-0 grid grid-cols-2 gap-1.5">
           <div class="rounded-lg bg-gray-50 dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] p-2">
             <div class="flex items-center gap-1 mb-0.5">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
@@ -151,13 +146,13 @@
     </div>
 
     <%# 直近の支払い %>
-    <div class="bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] shadow-sm overflow-hidden flex flex-col">
+    <div class="bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] shadow-sm flex flex-col min-h-0">
       <div class="px-3 py-2.5 border-b border-gray-100 dark:border-[#30363d] shrink-0">
         <p class="text-xs font-bold text-[#111718] dark:text-[#e6edf3]">直近の支払い</p>
         <p class="text-xs text-[#618689] dark:text-[#7d8590]">7日以内</p>
       </div>
       <% if @upcoming_payments.any? %>
-        <div class="overflow-y-auto flex-1 divide-y divide-gray-100/50 dark:divide-[#30363d]/50">
+        <div class="overflow-y-auto scrollbar-thin flex-1 min-h-0 divide-y divide-gray-100/50 dark:divide-[#30363d]/50">
           <% @upcoming_payments.each do |item| %>
             <% fe = item[:expense]; days = item[:days_until] %>
             <%
@@ -194,13 +189,13 @@
     </div>
 
     <%# カテゴリ別内訳 %>
-    <div class="bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] shadow-sm overflow-hidden flex flex-col">
+    <div class="bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] shadow-sm flex flex-col min-h-0">
       <div class="px-3 py-2.5 border-b-2 border-gray-200 dark:border-[#484f58] shrink-0">
         <p class="text-xs font-bold text-[#111718] dark:text-[#e6edf3]">カテゴリ別内訳</p>
         <p class="text-xs text-[#618689] dark:text-[#7d8590]">固定費合計に占める割合</p>
       </div>
       <% if @category_breakdown.any? %>
-        <div class="overflow-y-auto flex-1 p-3 flex flex-col gap-2.5">
+        <div class="overflow-y-auto scrollbar-thin flex-1 min-h-0 p-3 flex flex-col gap-2.5">
           <% @category_breakdown.each do |item| %>
             <div class="flex flex-col gap-1">
               <div class="flex items-center justify-between">
@@ -230,8 +225,9 @@
   </div>
 
   <%# 直近の引き落とし履歴 %>
-  <div class="flex-1 min-h-0 bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] shadow-sm overflow-hidden">
-    <div class="px-4 py-3 border-b border-gray-100 dark:border-[#30363d] flex items-center justify-between">
+  <%# テーブル部分のみをスクロール可能にする %>
+  <div class="flex-1 min-h-0 bg-white dark:bg-[#1c2128] rounded-xl border border-gray-200 dark:border-[#30363d] shadow-sm flex flex-col">
+    <div class="px-4 py-3 border-b border-gray-100 dark:border-[#30363d] flex items-center justify-between shrink-0">
       <div>
         <p class="text-xs font-bold text-[#111718] dark:text-[#e6edf3]">直近の引き落とし履歴</p>
         <p class="text-xs text-[#618689] dark:text-[#7d8590]">当月の支払日が過ぎた固定費</p>
@@ -239,34 +235,38 @@
       <%= link_to "すべて見る →", fixed_expenses_path, class: "text-xs font-bold text-[#13daec] hover:underline" %>
     </div>
     <% if @paid_this_month.any? %>
-      <table class="w-full">
-        <thead>
-          <tr class="border-b border-gray-100 dark:border-[#30363d]">
-            <th class="px-4 py-2 text-left text-xs font-bold text-[#618689] dark:text-[#7d8590] uppercase tracking-wider">名称</th>
-            <th class="px-4 py-2 text-left text-xs font-bold text-[#618689] dark:text-[#7d8590] uppercase tracking-wider">カテゴリ</th>
-            <th class="px-4 py-2 text-center text-xs font-bold text-[#618689] dark:text-[#7d8590] uppercase tracking-wider">引き落とし日</th>
-            <th class="px-4 py-2 text-right text-xs font-bold text-[#618689] dark:text-[#7d8590] uppercase tracking-wider">金額</th>
-          </tr>
-        </thead>
-        <tbody class="divide-gray-100/50 dark:divide-[#30363d]/50 divide-gray-100 dark:divide-[#30363d]">
-          <% @paid_this_month.each do |fe| %>
-            <tr class="hover:bg-gray-50 dark:hover:bg-[#161b22] transition-colors">
-              <td class="px-4 py-2.5"><p class="text-xs font-medium text-[#111718] dark:text-[#e6edf3]"><%= fe.name %></p></td>
-              <td class="px-4 py-2.5">
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-white"
-                      style="background-color: <%= fe.category.color %>;"><%= fe.category.name %></span>
-              </td>
-              <td class="px-4 py-2.5 text-center">
-                <span class="text-xs text-[#618689] dark:text-[#7d8590]"><%= Date.today.strftime("%Y年%-m月") %><%= fe.payment_day %>日</span>
-              </td>
-              <td class="px-4 py-2.5 text-right">
-                <span class="text-xs font-bold text-[#111718] dark:text-[#e6edf3]">−¥<%= number_with_delimiter(fe.fixed_cost_amount) %></span>
-              </td>
+      <%# テーブル部分のみをスクロール可能にする %>
+      <div class="flex-1 min-h-0 overflow-y-auto scrollbar-thin">
+        <table class="w-full">
+          <thead class="sticky top-0 bg-white dark:bg-[#1c2128] z-10">
+            <tr class="border-b border-gray-100 dark:border-[#30363d]">
+              <th class="px-4 py-2 text-left text-xs font-bold text-[#618689] dark:text-[#7d8590] uppercase tracking-wider">名称</th>
+              <th class="px-4 py-2 text-left text-xs font-bold text-[#618689] dark:text-[#7d8590] uppercase tracking-wider">カテゴリ</th>
+              <th class="px-4 py-2 text-center text-xs font-bold text-[#618689] dark:text-[#7d8590] uppercase tracking-wider">引き落とし日</th>
+              <th class="px-4 py-2 text-right text-xs font-bold text-[#618689] dark:text-[#7d8590] uppercase tracking-wider">金額</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <div class="px-4 py-2.5 border-t border-gray-100 dark:border-[#30363d] flex items-center justify-between bg-gray-50 dark:bg-[#161b22]">
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-[#30363d]">
+            <% @paid_this_month.each do |fe| %>
+              <tr class="hover:bg-gray-50 dark:hover:bg-[#161b22] transition-colors">
+                <td class="px-4 py-2.5"><p class="text-xs font-medium text-[#111718] dark:text-[#e6edf3]"><%= fe.name %></p></td>
+                <td class="px-4 py-2.5">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-white"
+                        style="background-color: <%= fe.category.color %>;"><%= fe.category.name %></span>
+                </td>
+                <td class="px-4 py-2.5 text-center">
+                  <span class="text-xs text-[#618689] dark:text-[#7d8590]"><%= Date.today.strftime("%Y年%-m月") %><%= fe.payment_day %>日</span>
+                </td>
+                <td class="px-4 py-2.5 text-right">
+                  <span class="text-xs font-bold text-[#111718] dark:text-[#e6edf3]">−¥<%= number_with_delimiter(fe.fixed_cost_amount) %></span>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <%# フッターは常時表示 %>
+      <div class="px-4 py-2.5 border-t border-gray-100 dark:border-[#30363d] flex items-center justify-between bg-gray-50 dark:bg-[#161b22] shrink-0">
         <span class="text-xs text-[#618689] dark:text-[#7d8590]">全 <span class="font-bold text-[#111718] dark:text-[#e6edf3]"><%= @paid_this_month.count %></span> 件</span>
         <div>
           <span class="text-xs text-[#618689] dark:text-[#7d8590] mr-2">当月引き落とし済み合計</span>
@@ -274,7 +274,7 @@
         </div>
       </div>
     <% else %>
-      <div class="flex items-center justify-center py-4">
+      <div class="flex-1 flex items-center justify-center">
         <p class="text-xs text-[#618689] dark:text-[#7d8590]">当月の引き落とし済み固定費はありません</p>
       </div>
     <% end %>

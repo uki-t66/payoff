@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @variant dark (&:where(.dark, .dark *));
+@import "./scrollbar.css";
 
 /* サイドバー開閉 */
 #sidebar {
